@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import MainLayout from './layout/MainLayout'
 import 'antd/dist/reset.css';
+import Portfolios from './pages/Portfolios'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Route element={<RequireAuth />}>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/portfolios" element={<Portfolios />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
