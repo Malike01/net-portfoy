@@ -100,10 +100,7 @@ const Portfolios: React.FC = () => {
         }}
       />
       {isAddItemModalOpen && (
-        <PortfolioForm
-          open={isAddItemModalOpen}
-          onCancel={() => setIsAddItemModalOpen(false)}
-        />
+        <PortfolioForm />
       )
       }
     </Flex>

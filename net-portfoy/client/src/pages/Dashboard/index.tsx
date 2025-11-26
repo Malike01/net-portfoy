@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { Typography, Divider, FloatButton } from 'antd';
-import { PlusOutlined, FolderAddOutlined, UserAddOutlined } from '@ant-design/icons';
+import { FolderAddOutlined, UserAddOutlined, ThunderboltOutlined } from '@ant-design/icons';
 
 import { StatCards } from './components/StatCards';
 import { AgendaList } from './components/AgendaList';
 import { PortfolioForm } from '../Portfolios/components/PortfolioForm';
+import { useAppDispatch } from '@/store/hooks';
+import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
 
 const { Title } = Typography;
 
 const Dashboard: React.FC = () => {
-  const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
-
+  const dispatch = useAppDispatch();
+  
   return (
     <div style={{ paddingBottom: 24 }}>
       <Title level={2}>Anasayfa</Title>
@@ -22,12 +24,12 @@ const Dashboard: React.FC = () => {
         trigger="click"
         type="primary"
         style={{ right: 24, bottom: 24 }}
-        icon={<PlusOutlined />}
+        icon={<ThunderboltOutlined />}
       >
         <FloatButton
           icon={<FolderAddOutlined />}
           tooltip="Yeni Portföy"
-          onClick={() => setIsPortfolioModalOpen(true)}
+          onClick={() => dispatch(setIsPortfolioModalOpen(true))}
         />
         <FloatButton
           icon={<UserAddOutlined />}
@@ -35,10 +37,7 @@ const Dashboard: React.FC = () => {
         />
       </FloatButton.Group>
 
-      <PortfolioForm
-        open={isPortfolioModalOpen}
-        onCancel={() => setIsPortfolioModalOpen(false)}
-      />
+      <PortfolioForm/>
     </div>
   );
 };

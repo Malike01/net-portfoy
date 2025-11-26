@@ -2,19 +2,22 @@ import React, { useEffect } from 'react';
 import { Modal, Form, Input, InputNumber, Select, Button } from 'antd';
 import dayjs from 'dayjs';
 import { PortfolioItem } from '@/types/type';
-import { CURRENCY_OPTIONS, STATUS_OPTIONS } from '@/constant/Portfolio';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
 
 interface PortfolioFormProps {
-  open: boolean;
-  onCancel: () => any;
   initialValues?: PortfolioItem | null;
 }
 
-export const PortfolioForm: React.FC<PortfolioFormProps> = ({ open, onCancel, initialValues }) => {
+export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) => {
   const [form] = Form.useForm();
 
+  const { isPortfolioModalOpen } = useAppSelector((state) => state.portfolios);
+
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    if (open) {
+    if (isPortfolioModalOpen) {
       if (initialValues) {
         form.setFieldsValue({
           ...initialValues,
@@ -38,8 +41,8 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ open, onCancel, in
   return (
     <Modal
       title={initialValues ? "Portföyü Düzenle" : "Yeni Portföy Ekle"}
-      open={open}
-      onCancel={onCancel}
+      open={isPortfolioModalOpen}
+      onCancel={() => dispatch(setIsPortfolioModalOpen(false))}
       footer={null}
     >
       <Form form={form} layout="vertical" onFinish={handleFinish}>
@@ -56,13 +59,13 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ open, onCancel, in
             <InputNumber style={{ width: '100%' }} formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />
           </Form.Item>
           <Form.Item name="currency" label="Birim" style={{ width: 100 }} initialValue="TL">
-            <Select options={CURRENCY_OPTIONS} />
+            <Select options={[{ label: 'TL', value: 'TL' }, { label: 'USD', value: 'USD' }]} />
           </Form.Item>
         </div>
 
         <div style={{ display: 'flex', gap: 16 }}>
           <Form.Item name="status" label="Durum" style={{ flex: 1 }} initialValue="Satılık">
-            <Select options={STATUS_OPTIONS} />
+            <Select options={[{ label: 'Satılık', value: 'Satılık' }, { label: 'Kiralık', value: 'Kiralık' }]} />
           </Form.Item>
         </div>
 
@@ -80,7 +83,7 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ open, onCancel, in
         </Form.Item>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
-          <Button onClick={onCancel}>İptal</Button>
+          <Button onClick={() => dispatch(setIsPortfolioModalOpen(false))}>İptal</Button>
           <Button type="primary" htmlType="submit">
             {initialValues ? 'Güncelle' : 'Kaydet'}
           </Button>

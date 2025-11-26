@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Layout, Menu, Button, Avatar, Dropdown, theme, Typography, Divider } from 'antd';
-import { 
-  MenuFoldOutlined, 
-  MenuUnfoldOutlined, 
-  DashboardOutlined, 
-  UserOutlined, 
-  HomeOutlined, 
+import { Layout, Menu, Button, Avatar, Dropdown, theme, Typography } from 'antd';
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  DashboardOutlined,
+  UserOutlined,
+  HomeOutlined,
   LogoutOutlined,
   SettingOutlined
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
+import { PortfolioForm } from '../pages/Portfolios/components/PortfolioForm';
+import logo from '../../public/logo.png';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -19,12 +21,13 @@ const { Text } = Typography;
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken();
 
   const handleLogout = () => {
@@ -73,26 +76,26 @@ const MainLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Sider 
-        trigger={null} 
-        collapsible 
+      <Sider
+        trigger={null}
+        collapsible
         theme='light'
         collapsed={collapsed}
         breakpoint="lg"
         collapsedWidth="80"
         style={{
-          padding:10
+          padding: 10
         }}
       >
         <div className="h-16 m-4 flex items-center justify-center bg-white/10 rounded-lg">
-           {collapsed ? (
-             <HomeOutlined style={{ fontSize: '20px', padding:18 }} />
-           ) : (
-             <>
-              <Text strong style={{ fontSize: '20px', padding:6 }}>NetPortfoy</Text>
-              <Divider size='large'/>
-             </>
-           )}
+          {collapsed ? (
+            <HomeOutlined style={{ fontSize: '20px', padding: 18 }} />
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
+              <img src={logo} alt="NetPortfoy Logo" style={{ width: 28, height: 28, marginRight: 8 }} />
+              <Text strong style={{ fontSize: '20px' }}>NetPortfoy</Text>
+            </div>
+          )}
         </div>
 
         <Menu
@@ -116,16 +119,16 @@ const MainLayout: React.FC = () => {
             }}
           />
 
-          <div className="mr-6 flex items-center gap-3" style={{display:'flex', alignItems:'center'}}>
+          <div className="mr-6 flex items-center gap-3" style={{ display: 'flex', alignItems: 'center' }}>
             <div className="text-right hidden sm:block">
               <Text strong className="block leading-tight">{user?.name || 'Danışman'} {' '}</Text>
               <Text type="secondary" className="text-xs">Gayrimenkul Danışmanı</Text>
             </div>
-            
+
             <Dropdown menu={{ items: userMenuPoints as any }} placement="bottomRight">
-              <Avatar 
-                style={{ backgroundColor: '#2563eb', cursor: 'pointer', marginLeft:8 }} 
-                icon={<UserOutlined />} 
+              <Avatar
+                style={{ backgroundColor: '#2563eb', cursor: 'pointer', marginLeft: 8 }}
+                icon={<UserOutlined />}
                 size="large"
               />
             </Dropdown>
@@ -143,6 +146,7 @@ const MainLayout: React.FC = () => {
           <Outlet />
         </Content>
       </Layout>
+      <PortfolioForm />
     </Layout>
   );
 };
