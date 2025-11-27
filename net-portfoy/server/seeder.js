@@ -18,6 +18,8 @@ const importData = async () => {
       name: 'Admin',
       email: 'admin@emlak.com',
       password: hashedPassword,
+      phone:'',
+      role: 'admin',
     });
 
     console.log('Kullanıcı Eklendi!');

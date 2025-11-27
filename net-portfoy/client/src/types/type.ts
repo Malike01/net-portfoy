@@ -9,3 +9,13 @@ export interface PortfolioItem {
   date: string;
   matchedClient?: string; 
 }
+
+export interface CustomerItem {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  status: 'Aktif' | 'Pasif' | 'Aranacak' | 'Teklif Verildi' | 'Tapu/Satış' | 'Kapora' | 'Randevu Alındı';
+  portfolioId?: number; 
+  portfolioTitle?: string; 
+}

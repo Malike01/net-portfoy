@@ -24,3 +24,5 @@ export const agendaItems = [
     isCompleted: true,
   },
 ];
+
+export const imageUploadFileTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];

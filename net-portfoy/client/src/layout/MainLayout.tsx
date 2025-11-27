@@ -127,7 +127,7 @@ const MainLayout: React.FC = () => {
 
             <Dropdown menu={{ items: userMenuPoints as any }} placement="bottomRight">
               <Avatar
-                style={{ backgroundColor: '#2563eb', cursor: 'pointer', marginLeft: 8 }}
+                style={{ backgroundColor: '#415a77', cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
                 icon={<UserOutlined />}
                 size="large"
               />

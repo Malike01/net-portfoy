@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Typography, Divider, FloatButton } from 'antd';
 import { FolderAddOutlined, UserAddOutlined, ThunderboltOutlined } from '@ant-design/icons';
 
@@ -7,6 +7,8 @@ import { AgendaList } from './components/AgendaList';
 import { PortfolioForm } from '../Portfolios/components/PortfolioForm';
 import { useAppDispatch } from '@/store/hooks';
 import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
+import { CustomerForm } from '../Customers/components/CustomerForm';
+import { setIsCustomerModalOpen } from '@/store/customersSlice';
 
 const { Title } = Typography;
 
@@ -34,10 +36,12 @@ const Dashboard: React.FC = () => {
         <FloatButton
           icon={<UserAddOutlined />}
           tooltip="Yeni Müşteri"
+          onClick={() => dispatch(setIsCustomerModalOpen(true))}
         />
       </FloatButton.Group>
 
       <PortfolioForm/>
+      <CustomerForm/>
     </div>
   );
 };

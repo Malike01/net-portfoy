@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from '../store';
+import { ConfigProvider } from 'antd';
+import trTR from 'antd/locale/tr_TR';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +21,26 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   return (
+    <ConfigProvider
+      locale={trTR}
+      theme={{
+        token: {
+          colorPrimary: '#778da9', 
+          borderRadius: 8,        
+          fontFamily: 'Inter, sans-serif',
+        },
+        components: {
+          Button: {
+            colorPrimaryHover: '#415a77',
+            colorPrimaryBg:'#778da9',
+            algorithm: true,
+          },
+          Input: {
+            activeBorderColor: '#778da9',
+          }
+        },
+      }}
+    >
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
@@ -26,5 +48,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         </BrowserRouter>
       </QueryClientProvider>
     </Provider>
+    </ConfigProvider>
   );
 };
