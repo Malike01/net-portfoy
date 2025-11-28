@@ -10,9 +10,9 @@ const getCustomers = async (req, res) => {
 // @desc    
 // @route   POST /api/customers
 const createCustomer = async (req, res) => {
-  const { name, phone, type } = req.body;
+  const { name, phone, customerType } = req.body;
 
-  if (!name || !phone || !type) {
+  if (!name || !phone || !customerType) {
     res.status(400);
     throw new Error('Lütfen Ad Soyad, Telefon ve Müşteri Tipi alanlarını doldurun');
   }

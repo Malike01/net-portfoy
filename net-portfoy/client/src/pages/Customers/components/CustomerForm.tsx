@@ -1,42 +1,50 @@
 import React, { useEffect } from 'react';
 import { Modal, Form, Input, Select, Button, Radio } from 'antd';
-import { CustomerItem } from '@/types/type';
 import { CUSTOMER_STATUS_OPTIONS, CUSTOMER_TYPE_OPTIONS } from '@/constant/Customers';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsCustomerModalOpen } from '@/store/customersSlice';
 import dayjs from 'dayjs';
+import { createCustomer, updateCustomer } from '@/services/customerApi';
+import { useParams } from 'react-router-dom';
 
-interface CustomerFormProps {
-  initialValues?: CustomerItem | null;
-}
 
-export const CustomerForm: React.FC<CustomerFormProps> = ({ initialValues }) => {
+export const CustomerForm: React.FC = () => {
   const [form] = Form.useForm();
 
-  const { isCustomerModalOpen } = useAppSelector((state) => state.customers);
+  const { isCustomerModalOpen, customers } = useAppSelector((state) => state.customers);
 
   const status = Form.useWatch('status', form);
   
   const dispatch = useAppDispatch(); 
 
+  const { id } = useParams(); 
+  const isEditMode = !!id;
+
   useEffect(() => {
     if (isCustomerModalOpen) {
-      if (initialValues) {
-        form.setFieldsValue(initialValues);
+      if (isEditMode) {
+        const formValues = customers.find(c => c._id === id);
+        form.setFieldsValue({...formValues, portfolioId:formValues?.portfolioTitle});
       } else {
         form.resetFields();
-        form.setFieldValue('status', 'Aktif');
       }
     }
-  }, [open, initialValues, form]);
+  }, [open, isEditMode, form]);
 
-  const handleFinish = (values: any) => {
-    const selectedPortfolio = [{ id: 1, title: 'Portföy 1' }].find(p => p.id === values.portfolioId);
+  const handleFinish = async(values: any) => {
+    console.log('Form Values:', values);
+    const selectedPortfolio = [{ id: 1, title: 'Portföy 1' }].find(p => values.portfolioId?.includes(p.id));
     const formattedValues = {
         ...values,
-        portfolioTitle: selectedPortfolio ? selectedPortfolio.title : undefined
+        portfolioTitle: selectedPortfolio ? selectedPortfolio.title : undefined,
+        portfolioId: selectedPortfolio ? [selectedPortfolio.id.toString()] : undefined,
     };
-    // onSubmit(formattedValues);
+
+    if(isEditMode){
+      await dispatch(updateCustomer({ id, data: values }));
+    } else{
+      await dispatch(createCustomer(formattedValues));
+    }
   };
 
   const onSearch = (value: string) => {
@@ -45,7 +53,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({ initialValues }) => 
 
   return (
     <Modal
-      title={initialValues ? "Müşteriyi Düzenle" : "Yeni Müşteri Ekle"}
+      title={isEditMode ? "Müşteriyi Düzenle" : "Yeni Müşteri Ekle"}
       open={isCustomerModalOpen}
       onCancel={() => {
         dispatch(setIsCustomerModalOpen(false))
@@ -73,7 +81,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({ initialValues }) => 
              <Input placeholder="05XX XXX XX XX" />
           </Form.Item>
           <Form.Item name="status" label="Durum" style={{ flex: 1 }}>
-             <Select showSearch={{ optionFilterProp: 'label', onSearch }} mode="multiple" options={CUSTOMER_STATUS_OPTIONS} />
+             <Select showSearch={{ optionFilterProp: 'label', onSearch }} options={CUSTOMER_STATUS_OPTIONS} />
           </Form.Item>
         </div>
         {
@@ -100,7 +108,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({ initialValues }) => 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
           <Button onClick={()=> dispatch(setIsCustomerModalOpen(false))}>İptal</Button>
           <Button type="primary" htmlType="submit">
-            {initialValues ? 'Güncelle' : 'Kaydet'}
+            {isEditMode ? 'Güncelle' : 'Kaydet'}
           </Button>
         </div>
       </Form>

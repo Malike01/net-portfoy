@@ -7,6 +7,7 @@ import MainLayout from './layout/MainLayout'
 import 'antd/dist/reset.css';
 import Portfolios from './pages/Portfolios'
 import Customers from './pages/Customers'
+import { CustomerForm } from './pages/Customers/components/CustomerForm'
 
 function App() {
   return (
@@ -16,7 +17,10 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/portfolios" element={<Portfolios />} />
-          <Route path="/customers" element={<Customers />} />
+          <Route path="/customers" element={<Customers />}>
+            <Route path="new" element={<CustomerForm />} />
+            <Route path=":id" element={<CustomerForm />} />
+          </Route>
         </Route>
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

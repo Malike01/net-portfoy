@@ -11,7 +11,7 @@ const customerSchema = mongoose.Schema(
       type: String,
       required: [true, 'Lütfen müşteri adını giriniz'],
     },
-    type: {
+    customerType: {
       type: String,
       enum: ['buyer', 'seller'],
       required: [true, 'Müşteri tipi zorunludur'],
@@ -41,7 +41,7 @@ const customerSchema = mongoose.Schema(
       default: 'new',
     },
     portfolioId: {
-      type: String, 
+      type: [String], 
       default: null
     },
     portfolioTitle: {
