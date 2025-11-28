@@ -5,7 +5,7 @@ import { PortfolioForm } from './components/PortfolioForm';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
 import { PORTFOLIO_STATUS_OPTIONS, PORTFOLIO_TYPE_OPTIONS } from '@/constant/Portfolio';
-import { truncateText } from '@/utils/stringUtils';
+import { truncateText } from '@/utils';
 
 const { Text } = Typography;
 
@@ -222,7 +222,7 @@ const Portfolios: React.FC = () => {
                 }}
                 size="small"
                 shape='circle'
-                icon={<MoreOutlined style={{color:'white'}}/>}
+                icon={<MoreOutlined style={{ color: 'white' }} />}
               />
             </Dropdown>
           </Card>

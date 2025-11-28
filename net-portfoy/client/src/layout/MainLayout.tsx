@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Layout, Menu, Button, Avatar, Dropdown, theme, Typography } from 'antd';
+import { Layout, Menu, Button, Avatar, Dropdown, theme, Typography, List, Popover, Badge } from 'antd';
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  DashboardOutlined,
   UserOutlined,
   HomeOutlined,
   LogoutOutlined,
-  SettingOutlined
+  SettingOutlined,
+  CheckCircleTwoTone,
+  BellOutlined,
+  ProductOutlined
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
@@ -17,6 +19,11 @@ import logo from '../../public/logo.png';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
+
+const recentNotifications = [
+  { id: 1, title: 'Yeni Müşteri Kaydı', desc: 'Ahmet Yılmaz sisteme eklendi.', time: '5 dk önce' },
+  { id: 2, title: 'Portföy Güncellemesi', desc: 'Sahil Evi fiyatı değişti.', time: '1 sa önce' },
+];
 
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -38,8 +45,8 @@ const MainLayout: React.FC = () => {
   const menuItems = [
     {
       key: '/',
-      icon: <DashboardOutlined />,
-      label: 'Panel',
+      icon: <ProductOutlined /> ,
+      label: 'Genel Bakış',
       onClick: () => navigate('/'),
     },
     {
@@ -74,6 +81,24 @@ const MainLayout: React.FC = () => {
     },
   ];
 
+  const notificationContent = (
+    <List
+      itemLayout="horizontal"
+      dataSource={recentNotifications}
+      renderItem={(item) => (
+        <List.Item>
+          <List.Item.Meta
+            avatar={<CheckCircleTwoTone twoToneColor="#52c41a" />}
+            title={<Text style={{ fontSize: 13 }}>{item.title}</Text>}
+            description={<Text type="secondary" style={{ fontSize: 11 }}>{item.desc} - {item.time}</Text>}
+          />
+        </List.Item>
+      )}
+      style={{ width: 300 }}
+      footer={<Button type="link" block size="small">Tümünü Gör</Button>}
+    />
+  );
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
@@ -89,7 +114,7 @@ const MainLayout: React.FC = () => {
       >
         <div className="h-16 m-4 flex items-center justify-center bg-white/10 rounded-lg">
           {collapsed ? (
-            <HomeOutlined style={{ fontSize: '20px', padding: 18 }} />
+            <img src={logo} alt="NetPortfoy Logo" style={{ width: 28, height: 28, marginLeft: 18 }} />
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
               <img src={logo} alt="NetPortfoy Logo" style={{ width: 28, height: 28, marginRight: 8 }} />
@@ -120,17 +145,47 @@ const MainLayout: React.FC = () => {
           />
 
           <div className="mr-6 flex items-center gap-3" style={{ display: 'flex', alignItems: 'center' }}>
-            <div className="text-right hidden sm:block">
-              <Text strong className="block leading-tight">{user?.name || 'Danışman'} {' '}</Text>
-              <Text type="secondary" className="text-xs">Gayrimenkul Danışmanı</Text>
+            <Popover
+              content={notificationContent}
+              title="Bildirimler"
+              trigger="click"
+              placement="bottomRight"
+            >
+              <Badge count={2} size="small" offset={[-2, 2]} style={{ marginRight: 8 }}>
+                <Button
+                  shape="circle"
+                  icon={<BellOutlined style={{ fontSize: 20 }} />}
+                  style={{ border: 'none', background: 'transparent', boxShadow: 'none', marginRight: 8 }}
+                />
+              </Badge>
+            </Popover>
+            <div className="text-right hidden sm:block" style={{ marginRight: 12, textAlign: 'right' }}>
+              <Text strong style={{ display: 'block', fontSize: '14px', lineHeight: '1.2', color: '#1f1f1f' }}>
+                {user?.name || 'Danışman'}
+              </Text>
+              <Text type="secondary" style={{ fontSize: '11px', display: 'block' }}>
+                Gayrimenkul Danışmanı
+              </Text>
             </div>
 
             <Dropdown menu={{ items: userMenuPoints as any }} placement="bottomRight">
               <Avatar
-                style={{ backgroundColor: '#415a77', cursor: 'pointer', marginLeft: 8, marginRight: 8 }}
-                icon={<UserOutlined />}
-                size="large"
-              />
+                size={44}
+                style={{
+                  cursor: 'pointer',
+                  background: 'linear-gradient(135deg, #415a77 0%, #778da9 100%)',
+                  border: '2px solid #fff',
+                  boxShadow: '0 2px 10px rgba(24, 144, 255, 0.2)',
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  margin:8
+                }}
+              >
+                {(user?.name || 'Danışman').charAt(0).toUpperCase()}
+              </Avatar>
             </Dropdown>
           </div>
         </Header>

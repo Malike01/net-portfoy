@@ -7,6 +7,7 @@ import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
 import { CURRENCY_OPTIONS, PORTFOLIO_STATUS_OPTIONS, PORTFOLIO_TYPE_OPTIONS } from '@/constant/Portfolio';
 import { GlobalOutlined, HomeOutlined, LinkOutlined, UploadOutlined } from '@ant-design/icons';
 import { imageUploadFileTypes } from '@/constant';
+import { truncateText } from '@/utils';
 
 interface PortfolioFormProps {
   initialValues?: PortfolioItem | null;
@@ -62,7 +63,7 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) =
     let newFileList = [...info.fileList];
     newFileList = newFileList.map((file) => {
       if (file.name) {
-        file.name = file.name.substring(0, 12) + '...';
+        file.name = truncateText(file.name, 12);
       }
       return file;
     });
