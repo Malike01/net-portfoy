@@ -1,50 +1,84 @@
 import React, { useEffect } from 'react';
-import { Modal, Form, Input, InputNumber, Select, Button, Upload, UploadProps, message, Radio } from 'antd';
+import { Modal, Form, Input, InputNumber, Select, Button, Upload, UploadProps, message, Radio, Divider } from 'antd';
 import dayjs from 'dayjs';
-import { PortfolioItem } from '@/types/type';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
-import { CURRENCY_OPTIONS, PORTFOLIO_STATUS_OPTIONS, PORTFOLIO_TYPE_OPTIONS } from '@/constant/Portfolio';
-import { GlobalOutlined, HomeOutlined, LinkOutlined, UploadOutlined } from '@ant-design/icons';
+import { clearCurrentItem, setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
+import { CURRENCY_OPTIONS, PORTFOLIO_STATUS_OPTIONS, PORTFOLIO_TYPE_OPTIONS, PORTFOLIO_TYPES } from '@/constant/Portfolio';
+import { GlobalOutlined, HomeOutlined, LinkOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { imageUploadFileTypes } from '@/constant';
 import { truncateText } from '@/utils';
+import { setIsCustomerModalOpen } from '@/store/customersSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createPortfolio, fetchPortfolioById, updatePortfolio } from '@/services/portfolioService';
 
-interface PortfolioFormProps {
-  initialValues?: PortfolioItem | null;
-}
-
-export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) => {
+export const PortfolioForm: React.FC = () => {
   const [form] = Form.useForm();
 
-  const { isPortfolioModalOpen } = useAppSelector((state) => state.portfolios);
+  const { id } = useParams();
+  const isEditMode = !!id;
+
+  const navigate = useNavigate();
+
+  const { isPortfolioModalOpen, currentItem  } = useAppSelector((state) => state.portfolios);
+  const { customers } = useAppSelector((state) => state.customers);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (isPortfolioModalOpen) {
-      if (initialValues) {
-        form.setFieldsValue({
-          ...initialValues,
-          date: dayjs(initialValues.date)
-        });
-      } else {
-        form.resetFields();
-        form.setFieldValue('date', dayjs());
-      }
+    if (isEditMode) {
+      dispatch(fetchPortfolioById(id!));
+    } else {
+      dispatch(clearCurrentItem()); 
+      form.resetFields();
+      form.setFieldsValue({
+        portfolioType: PORTFOLIO_TYPES.FOR_SALE,
+        status: 'active',
+        currency: 'TL',
+        externalLinks: { sahibinden: '', hepsiemlak: '', emlakjet: '' },
+        imageUrl: '',
+        date: dayjs().toDate(),
+      });
     }
-  }, [open, initialValues, form]);
+  }, [dispatch, id, isEditMode, form]);
 
-  const handleFinish = (values: any) => {
-    const formattedValues = {
-      ...values,
-      date: values.date.format('YYYY-MM-DD')
+
+  const handleFinish = async(values: any) => {
+    const params = {
+      ...values, 
+      externalLinks: { 
+        sahibinden: values.sahibinden, 
+        hepsiemlak: values.hepsiemlak, 
+        emlakjet: values.emlakjet
+      }}
+    try {
+        if (isEditMode) {
+          await dispatch(updatePortfolio({ 
+            id: id!, data: params
+            })).unwrap();
+        } else {
+          await dispatch(createPortfolio(params)).unwrap();
+        }
+        navigate('/portfolios'); 
+      } catch (error) {
+        console.error('İşlem başarısız', error);
+      }
+      dispatch(setIsPortfolioModalOpen(false));
     };
-    // onSubmit(formattedValues);
-  };
 
   const onSearch = (value: string) => {
    console.log('search:', value);
  };
+
+ useEffect(() => {
+    if (currentItem && isEditMode) {
+      form.setFieldsValue({
+        ...currentItem, 
+        sahibinden: currentItem.externalLinks?.sahibinden || '',
+        hepsiemlak: currentItem.externalLinks?.hepsiemlak || '',
+        emlakjet: currentItem.externalLinks?.emlakjet || '',
+        matchedCustomers:customers.find(c => currentItem.matchedCustomers?.includes(c._id)) ? currentItem.matchedCustomers : []});
+    }
+  }, [currentItem, isEditMode, form]);
 
  const props: UploadProps = {
   name: 'file',
@@ -78,17 +112,22 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) =
   },
 };
 
+const handleCancel = () => {
+    dispatch(clearCurrentItem());
+    dispatch(setIsPortfolioModalOpen(false));
+    navigate('/portfolios');
+    form.resetFields();
+  };
+
 
   return (
     <Modal
-      title={initialValues ? "Portföyü Düzenle" : "Yeni Portföy Ekle"}
+      title={isEditMode ? "Portföyü Düzenle" : "Yeni Portföy Ekle"}
       open={isPortfolioModalOpen}
       centered
-      onCancel={() => {
-        dispatch(setIsPortfolioModalOpen(false))
-        form.resetFields();
-      }}
+      onCancel={handleCancel}
       footer={null}
+      destroyOnHidden={true}
     >
       <Form form={form} layout="vertical" onFinish={handleFinish}>
         <Form.Item name="title" label="İlan Başlığı" rules={[{ required: true, min:5, message: 'Başlık en az 5 karakter olmalıdır' }]}>
@@ -110,7 +149,7 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) =
             <Input.TextArea rows={3} maxLength={50} placeholder='İlan hakkında kısa bir açıklama...' />
         </Form.Item>
         <div style={{ display: 'flex', gap: 52 }}>
-          <Form.Item name="customerType" label="Müşteri Tipi" rules={[{ required: true }]}>
+          <Form.Item name="portfolioType" label="Portföy Tipi" rules={[{ required: true }]}>
               <Radio.Group
                 block
                 options={PORTFOLIO_TYPE_OPTIONS}
@@ -125,7 +164,6 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) =
             </Upload>
           </Form.Item>
         </div>
-        <Form.Item name="link" label="Bağlantı (URL)">
           <Form.Item
             label=""
             name="sahibinden"
@@ -141,7 +179,6 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) =
               allowClear
             />
           </Form.Item>
-
           <Form.Item
             label=""
             name="hepsiemlak"
@@ -150,11 +187,10 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) =
             <Input 
               size="large" 
               placeholder="https://www.hepsiemlak.com/..." 
-              prefix={<HomeOutlined style={{ color: '#d9232e' }} />} // Hepsiemlak kırmızısı
+              prefix={<HomeOutlined style={{ color: '#d9232e' }} />}
               allowClear
             />
           </Form.Item>
-
           <Form.Item
             label=""
             name="emlakjet"
@@ -163,26 +199,38 @@ export const PortfolioForm: React.FC<PortfolioFormProps> = ({ initialValues }) =
             <Input 
               size="large" 
               placeholder="https://www.emlakjet.com/..." 
-              prefix={<GlobalOutlined style={{ color: '#2ecc71' }} />} // Yeşil ton
+              prefix={<GlobalOutlined style={{ color: '#2ecc71' }} />}
               allowClear
             />
           </Form.Item>
-        </Form.Item>
-
-        <Form.Item name="matchedClient" label="Müşteri İle Eşleştir">
+        <Form.Item name="matchedCustomers" label="Müşteri İle Eşleştir">
           <Select
             placeholder="Müşteri seçin..."
             allowClear
             mode="multiple"
             showSearch={{ optionFilterProp: 'label', onSearch }}
-            options={[]}
+            options={customers.map((customer) => ({
+              value: customer._id,
+              label: customer.name,
+            }))}
+            popupRender={(menu) => (
+              <>
+                {menu}
+                <Divider style={{ margin: '8px 0' }} />
+                  <Button type="text" icon={<PlusOutlined />} onClick={()=>{
+                    dispatch(setIsCustomerModalOpen(true))
+                  }}>
+                    Yeni Müşteri Ekle
+                  </Button>
+              </>
+            )}
           />
         </Form.Item>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
           <Button onClick={() => dispatch(setIsPortfolioModalOpen(false))}>İptal</Button>
           <Button type="primary" htmlType="submit">
-            {initialValues ? 'Güncelle' : 'Kaydet'}
+            {isEditMode ? 'Güncelle' : 'Kaydet'}
           </Button>
         </div>
       </Form>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Input, Select, Button, Radio } from 'antd';
 import { CUSTOMER_STATUS_OPTIONS, CUSTOMER_TYPE_OPTIONS } from '@/constant/Customers';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -12,6 +12,10 @@ export const CustomerForm: React.FC = () => {
   const [form] = Form.useForm();
 
   const { isCustomerModalOpen, customers } = useAppSelector((state) => state.customers);
+  
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
+  const filteredOptions = [{ title: 'Portföy 1', id: 1 }].filter((o) => !selectedItems.includes(o.id.toString()));
 
   const status = Form.useWatch('status', form);
   
@@ -32,7 +36,6 @@ export const CustomerForm: React.FC = () => {
   }, [open, isEditMode, form]);
 
   const handleFinish = async(values: any) => {
-    console.log('Form Values:', values);
     const selectedPortfolio = [{ id: 1, title: 'Portföy 1' }].find(p => values.portfolioId?.includes(p.id));
     const formattedValues = {
         ...values,
@@ -98,10 +101,15 @@ export const CustomerForm: React.FC = () => {
         <Form.Item name="portfolioId" label="İlgilendiği Portföy (Eşleştir)">
           <Select 
             allowClear
+            value={selectedItems}
+            onChange={setSelectedItems}
             mode="multiple"
             showSearch={{ optionFilterProp: 'label', onSearch }}
             placeholder="Bir portföy seçin..."
-            options={[{ title: 'Portföy 1', id: 1 }].map(p => ({ label: p.title, value: p.id }))}
+            options={filteredOptions.map((item) => ({
+              value: item,
+              label: item,
+            }))}
           />
         </Form.Item>
 

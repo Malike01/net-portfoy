@@ -1,5 +1,5 @@
 export interface PortfolioItem {
-  id: number;
+  _id: number;
   title: string;
   description: string;
   price: number;
@@ -7,7 +7,12 @@ export interface PortfolioItem {
   status: 'Satılık' | 'Kiralık' | 'pasif';
   imageUrl: string;
   date: string;
-  matchedClient?: string;
+  matchedCustomers?: string;
+  externalLinks?: {
+    sahibinden?: string;
+    hepsiemlak?: string;
+    emlakjet?: string;
+  }
 }
 
 export interface CustomerItem {
@@ -19,4 +24,5 @@ export interface CustomerItem {
   portfolioId?: number;
   portfolioTitle?: string;
   customerType?: 'buyer' | 'seller';
+  date: Date;
 }

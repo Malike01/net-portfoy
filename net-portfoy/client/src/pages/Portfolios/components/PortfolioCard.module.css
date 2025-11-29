@@ -1,0 +1,21 @@
+.portfolioImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card:hover .portfolioImage {
+    transform: scale(1.1);
+}
+
+.actionButton {
+    color: #8c8c8c;
+    transition: all 0.3s;
+}
+
+.actionButton:hover {
+    color: #1890ff;
+    /* Primary color or similar */
+    background-color: rgba(0, 0, 0, 0.05);
+}
