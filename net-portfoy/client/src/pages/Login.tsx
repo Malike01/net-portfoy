@@ -18,28 +18,28 @@ const Login: React.FC = () => {
 
 
   const onFinish = (values: any) => {
-     dispatch(login({ email: values.email, password: values.password }));
+    dispatch(login({ email: values.email, password: values.password }));
   };
-  
+
   return (
     <div className={styles.container}>
-      <Card 
-        className={styles.card} 
-        styles={{ body: { padding: '2rem' } }}
+      <Card
+        className={styles.card}
+        bordered={false}
       >
         <div className={styles.header}>
           <div className={styles.iconContainer}>
-             <HomeTwoTone className={styles.icon} twoToneColor="#2563eb"/>
+            <HomeTwoTone className={styles.icon} twoToneColor="#2563eb" />
           </div>
           <Title level={3} className={styles.title}>NetPortfoy</Title>
-          <Text type="secondary">Portföy ve Müşteri Yönetim Paneli</Text>
+          <Text type="secondary" className={styles.subtitle}>Portföy ve Müşteri Yönetim Paneli</Text>
         </div>
 
         {isError && (
           <Alert
             message="Giriş Hatası"
             description={
-              message || 
+              message ||
               "Sunucuya bağlanılamadı."
             }
             type="error"
@@ -63,9 +63,9 @@ const Login: React.FC = () => {
               { type: 'email', message: 'Geçerli bir e-posta giriniz!' }
             ]}
           >
-            <Input 
-              prefix={<UserOutlined className={styles.inputIcon} />} 
-              placeholder="ornek@emlak.com" 
+            <Input
+              prefix={<UserOutlined className={styles.inputIcon} />}
+              placeholder="ornek@emlak.com"
             />
           </Form.Item>
 
@@ -74,16 +74,16 @@ const Login: React.FC = () => {
             name="password"
             rules={[{ required: true, message: 'Lütfen şifrenizi girin!' }]}
           >
-            <Input.Password 
-              prefix={<LockOutlined className={styles.inputIcon} />} 
-              placeholder="••••••" 
+            <Input.Password
+              prefix={<LockOutlined className={styles.inputIcon} />}
+              placeholder="••••••"
             />
           </Form.Item>
           <Form.Item>
-            <Button 
-              type="primary" 
-              htmlType="submit" 
-              block 
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
               loading={isLoading}
               className={styles.submitButton}
             >
@@ -91,7 +91,7 @@ const Login: React.FC = () => {
             </Button>
           </Form.Item>
         </Form>
-        
+
         <div className={styles.footer}>
           <Text type="secondary" className={styles.footerText}>
             © 2025 NetPortfoy CRM Sistemi
