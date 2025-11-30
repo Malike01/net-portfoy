@@ -8,8 +8,7 @@
 <img width="1919" height="945" alt="Ekran görüntüsü 2025-11-30 163057" src="https://github.com/user-attachments/assets/d6614f86-f027-496e-b04a-4a26438f70e2" />
 <img width="1919" height="940" alt="image" src="https://github.com/user-attachments/assets/f55cb3ea-be7f-4c2f-bf32-c504e1d1faa1" />
 <img width="1917" height="942" alt="Ekran görüntüsü 2025-11-30 163204" src="https://github.com/user-attachments/assets/438f6293-4214-423e-bbc6-c44c6745279d" />
-![Uploading image.png…]()
-
+<img width="1914" height="938" alt="Ekran görüntüsü 2025-11-30 195004" src="https://github.com/user-attachments/assets/ddd07588-8a9a-4a6b-afa8-83d4c3e3cc38" />
 
 ## 🌟 Key Features
 
