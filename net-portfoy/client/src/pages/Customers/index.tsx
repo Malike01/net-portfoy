@@ -6,7 +6,7 @@ import { CustomerItem } from '@/types/type';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsCustomerModalOpen } from '@/store/customersSlice';
 import { CUSTOMER_STATUS_OPTIONS, CUSTOMER_TYPE_OPTIONS } from '@/constant/Customers';
-import { deleteCustomer, getCustomers } from '@/services/customerApi';
+import { deleteCustomer, getCustomers } from '@/services/customerService';
 import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;

@@ -1,43 +1,46 @@
-import React, { useState } from 'react';
-import { Typography, Tooltip, Button, Tag } from 'antd';
+import React from 'react';
+import { Typography, Tooltip, Button, Tag, Empty } from 'antd';
 import { 
   CheckCircleOutlined, 
   ClockCircleOutlined, 
   PhoneOutlined, 
-  WalletOutlined, 
-  UserAddOutlined 
+  WalletOutlined,  
+  CalendarOutlined,
+  UserOutlined
 } from '@ant-design/icons';
-import { agendaItems } from '../../../constant';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { completeAgendaTask } from '@/services/dashboardService';
 
 
 const { Title, Text } = Typography;
 
 export const AgendaList: React.FC = () => {
-  const [tasks, setTasks] = useState(agendaItems);
-
-  const toggleTask = (id: number) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, isCompleted: !t.isCompleted } : t));
-  };
-
-  const getStyleByType = (type: string) => {
+  const { stats } = useAppSelector((state) => state.dashboard);
+  const agenda = stats && stats.agenda || [];
+  
+  const dispatch = useAppDispatch();
+  
+  const getStatusConfig = (type: string) => {
     switch (type) {
-      case 'call': 
-        return { icon: <PhoneOutlined />, color: '#3b82f6', bg: '#eff6ff' };
-      case 'offer': 
-        return { icon: <WalletOutlined />, color: '#f97316', bg: '#fff7ed' };
-      default: 
-        return { icon: <UserAddOutlined />, color: '#a855f7', bg: '#f3e8ff' };
+      case 'to_call': return { icon: <PhoneOutlined />, color: 'blue', text: 'Aranacak', bg: '#eff6ff' };
+      case 'offer_made': return { icon: <WalletOutlined />, color: 'orange', text: 'Teklif Bekleniyor', bg: '#fff7ed' };
+      case 'appointment': return { icon: <CalendarOutlined />, color: 'purple', text: 'Randevu', bg: '#f3e8ff' };
+      case 'new': return { icon: <UserOutlined />, color: 'green', text: 'Yeni Kayıt', bg: '#f6ffed' };
+      default: return { icon: <UserOutlined />, color: 'default', text: 'Takip Et', bg: '#f5f5f5' };
     }
-  };
+};
+
+const handleCompleteTask = (id: string) => {
+    dispatch(completeAgendaTask(id));
+};
 
   return (
     <div style={{ marginTop: 32 }}>
       <Title level={4} style={{ marginBottom: 16 }}>Bugünün Ajandası</Title>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {tasks.map((item) => {
-          const style = getStyleByType(item.type);
-          
+        {agenda.length > 0 ? agenda.map((item) => {
+          const config = getStatusConfig(item.type);
           return (
             <div 
               key={item.id}
@@ -61,20 +64,20 @@ export const AgendaList: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: item.isCompleted ? '#e5e7eb' : style.bg,
-                  color: item.isCompleted ? '#9ca3af' : style.color,
+                  backgroundColor: item.isCompleted ? '#e5e7eb' : config.bg,
+                  color: item.isCompleted ? '#9ca3af' : config.color,
                   fontSize: 18
                 }}>
-                  {style.icon}
+                  {config.icon}
                 </div>
 
                 <div>
                   <Text strong delete={item.isCompleted} style={{ display: 'block', fontSize: 16, marginBottom: 4 }}>
-                    {item.client}
+                    {item.title}
                   </Text>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <Tag color={item.type === 'offer' ? 'orange' : 'blue'} bordered={false}>
-                      {item.action}
+                      {item.isCompleted ? 'Tamamlandı' : config.text}
                     </Tag>
                     <Text type="secondary" style={{ fontSize: 12, display: 'flex', alignItems: 'center' }}>
                       <ClockCircleOutlined style={{ marginRight: 4 }} /> {item.time}
@@ -88,7 +91,7 @@ export const AgendaList: React.FC = () => {
                   shape="circle" 
                   type="text"
                   icon={<CheckCircleOutlined />} 
-                  onClick={() => toggleTask(item.id)}
+                  onClick={() => handleCompleteTask(item.id)}
                   style={{
                     color: item.isCompleted ? '#52c41a' : '#d9d9d9',
                     fontSize: 16,
@@ -99,7 +102,9 @@ export const AgendaList: React.FC = () => {
               </Tooltip>
             </div>
           );
-        })}
+        }): (
+            <Empty description="Ajandanız bugün boş 🎉" />
+          )}
       </div>
     </div>
   );

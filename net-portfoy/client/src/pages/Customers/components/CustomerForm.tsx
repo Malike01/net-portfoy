@@ -4,7 +4,7 @@ import { CUSTOMER_STATUS_OPTIONS, CUSTOMER_TYPE_OPTIONS } from '@/constant/Custo
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsCustomerModalOpen } from '@/store/customersSlice';
 import dayjs from 'dayjs';
-import { createCustomer, updateCustomer } from '@/services/customerApi';
+import { createCustomer, updateCustomer } from '@/services/customerService';
 import { useParams } from 'react-router-dom';
 
 

@@ -1,14 +1,17 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Tag } from 'antd';
 import {
   HomeOutlined,
   TeamOutlined,
   CheckCircleOutlined,
   DollarCircleOutlined,
   ArrowUpOutlined,
-  ArrowDownOutlined
+  ArrowDownOutlined,
+  MinusOutlined
 } from '@ant-design/icons';
 import styles from './StatCards.module.css';
+import { useAppSelector } from '@/store/hooks';
+import { formatCurrency } from '@/utils';
 
 interface StatCardProps {
   title: string;
@@ -50,45 +53,64 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, trend, t
 );
 
 export const StatCards: React.FC = () => {
+  const { stats } = useAppSelector((state) => state.dashboard);
+  const kpi = stats && stats.kpi || null;
+  const trends = stats && stats?.kpi?.trends || null
+
+    const renderTrendTag = (value: number, isPercent: boolean = false) => {
+    if (value === 0) {
+      return <Tag color="default" icon={<MinusOutlined />}>0</Tag>;
+    }
+    
+    const isPositive = value > 0;
+    const color = isPositive ? 'success' : 'error';
+    const icon = isPositive ? <ArrowUpOutlined /> : <ArrowDownOutlined />;    
+    return (
+      <Tag color={color} icon={icon}>
+        {isPercent ? '%' : ''}
+      </Tag>
+    );
+  };
+  
   return (
     <Row gutter={[24, 24]} className={styles.row}>
       <Col xs={24} sm={12} lg={6}>
         <StatCard
           title="Portföy Değeri"
-          value="₺45.2M"
+          value={formatCurrency(kpi?.totalValue || 0)}
           icon={<DollarCircleOutlined />}
           color="#1890ff"
-          trend="12%"
+          trend={renderTrendTag(trends?.value || 0, true) as unknown as string}
           trendUp={true}
         />
       </Col>
       <Col xs={24} sm={12} lg={6}>
         <StatCard
           title="Aktif Portföy"
-          value="12"
+          value={kpi?.activePortfolios.toString() || "0"}
           icon={<HomeOutlined />}
           color="#722ed1"
-          trend="4"
+          trend={renderTrendTag(trends?.portfolio || 0) as unknown as string}
           trendUp={true}
         />
       </Col>
       <Col xs={24} sm={12} lg={6}>
         <StatCard
           title="Toplam Müşteri"
-          value="24"
+          value={kpi?.totalCustomers.toString() || "0"}
           icon={<TeamOutlined />}
           color="#fa8c16"
-          trend="2"
+          trend={renderTrendTag(trends?.customer || 0) as unknown as string}
           trendUp={false}
         />
       </Col>
       <Col xs={24} sm={12} lg={6}>
         <StatCard
           title="Bu Ay Satılan"
-          value="3"
+          value={kpi?.soldThisMonth.toString() || "0"}
           icon={<CheckCircleOutlined />}
           color="#52c41a"
-          trend="1"
+          trend={renderTrendTag(trends?.sales || 0) as unknown as string}
           trendUp={true}
         />
       </Col>

@@ -26,3 +26,27 @@ export interface CustomerItem {
   customerType?: 'buyer' | 'seller';
   date: Date;
 }
+
+export interface DashboardData {
+  kpi: {
+    totalValue: number;
+    activePortfolios: number;
+    totalCustomers: number;
+    soldThisMonth: number;
+    pendingAppointments: number;
+    callListCount: number;
+    trends?: {
+      value: number;
+      portfolio: number;
+      customer: number;
+      sales: number;
+    };
+  };
+  agenda: {
+    id: string;
+    title: string;
+    type: string;
+    time: string;
+    isCompleted: boolean;
+  }[];
+}

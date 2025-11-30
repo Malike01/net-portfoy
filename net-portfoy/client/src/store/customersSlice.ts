@@ -1,4 +1,4 @@
-import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from '@/services/customerApi';
+import { createCustomer, deleteCustomer, getCustomers, updateCustomer } from '@/services/customerService';
 import { CustomerItem } from '@/types/type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 

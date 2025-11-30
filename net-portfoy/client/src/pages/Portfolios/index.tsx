@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsPortfolioModalOpen, setLocalPortfolios } from '@/store/portfoliosSlice';
 import { PORTFOLIO_STATUS_OPTIONS } from '@/constant/Portfolio';
 import { CustomerForm } from '../Customers/components/CustomerForm';
-import { getCustomers } from '@/services/customerApi';
+import { getCustomers } from '@/services/customerService';
 import PortfolioCard from './components/PortfolioCard';
 import { fetchPortfolios } from '@/services/portfolioService';
 import { useNavigate } from 'react-router-dom';
