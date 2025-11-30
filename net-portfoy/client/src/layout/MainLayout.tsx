@@ -16,14 +16,10 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import { PortfolioForm } from '../pages/Portfolios/components/PortfolioForm';
 import logo from '../../public/logo.png';
+import { MENU_KEYS, RECENT_NOTIFICATIONS, USER_MENU_KEYS } from '@/constant/Layout';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
-
-const recentNotifications = [
-  { id: 1, title: 'Yeni Müşteri Kaydı', desc: 'Ahmet Yılmaz sisteme eklendi.', time: '5 dk önce' },
-  { id: 2, title: 'Portföy Güncellemesi', desc: 'Sahil Evi fiyatı değişti.', time: '1 sa önce' },
-];
 
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -44,28 +40,28 @@ const MainLayout: React.FC = () => {
 
   const menuItems = [
     {
-      key: '/',
-      icon: <ProductOutlined /> ,
+      key: MENU_KEYS.DASHBOARD,
+      icon: <ProductOutlined />,
       label: 'Genel Bakış',
-      onClick: () => navigate('/'),
+      onClick: () => navigate(MENU_KEYS.DASHBOARD),
     },
     {
-      key: '/portfolios',
+      key: MENU_KEYS.PORTFOLIOS,
       icon: <HomeOutlined />,
       label: 'Portföyler',
-      onClick: () => navigate('/portfolios'),
+      onClick: () => navigate(MENU_KEYS.PORTFOLIOS),
     },
     {
-      key: '/customers',
+      key: MENU_KEYS.CUSTOMERS,
       icon: <UserOutlined />,
       label: 'Müşteriler',
-      onClick: () => navigate('/customers'),
+      onClick: () => navigate(MENU_KEYS.CUSTOMERS),
     },
   ];
 
   const userMenuPoints = [
     {
-      key: '1',
+      key: USER_MENU_KEYS.SETTINGS,
       label: 'Hesap Ayarları',
       icon: <SettingOutlined />,
     },
@@ -73,7 +69,7 @@ const MainLayout: React.FC = () => {
       type: 'divider',
     },
     {
-      key: '2',
+      key: USER_MENU_KEYS.LOGOUT,
       label: 'Çıkış Yap',
       icon: <LogoutOutlined />,
       danger: true,
@@ -84,7 +80,7 @@ const MainLayout: React.FC = () => {
   const notificationContent = (
     <List
       itemLayout="horizontal"
-      dataSource={recentNotifications}
+      dataSource={RECENT_NOTIFICATIONS}
       renderItem={(item) => (
         <List.Item>
           <List.Item.Meta
@@ -181,7 +177,7 @@ const MainLayout: React.FC = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  margin:8
+                  margin: 8
                 }}
               >
                 {(user?.name || 'Danışman').charAt(0).toUpperCase()}

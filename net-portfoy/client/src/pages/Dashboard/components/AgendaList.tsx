@@ -10,7 +10,7 @@ import {
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { completeAgendaTask } from '@/services/dashboardService';
-
+import { AGENDA_CONFIG, AGENDA_STATUSES } from '@/constant/Dashboard';
 
 const { Title, Text } = Typography;
 
@@ -21,18 +21,22 @@ export const AgendaList: React.FC = () => {
   const dispatch = useAppDispatch();
   
   const getStatusConfig = (type: string) => {
-    switch (type) {
-      case 'to_call': return { icon: <PhoneOutlined />, color: 'blue', text: 'Aranacak', bg: '#eff6ff' };
-      case 'offer_made': return { icon: <WalletOutlined />, color: 'orange', text: 'Teklif Bekleniyor', bg: '#fff7ed' };
-      case 'appointment': return { icon: <CalendarOutlined />, color: 'purple', text: 'Randevu', bg: '#f3e8ff' };
-      case 'new': return { icon: <UserOutlined />, color: 'green', text: 'Yeni Kayıt', bg: '#f6ffed' };
-      default: return { icon: <UserOutlined />, color: 'default', text: 'Takip Et', bg: '#f5f5f5' };
-    }
-};
+    const config = AGENDA_CONFIG[type as keyof typeof AGENDA_CONFIG] || AGENDA_CONFIG.DEFAULT;
+    let icon = <UserOutlined />;
 
-const handleCompleteTask = (id: string) => {
+    switch (type) {
+      case AGENDA_STATUSES.TO_CALL: icon = <PhoneOutlined />; break;
+      case AGENDA_STATUSES.OFFER_MADE: icon = <WalletOutlined />; break;
+      case AGENDA_STATUSES.APPOINTMENT: icon = <CalendarOutlined />; break;
+      case AGENDA_STATUSES.NEW: icon = <UserOutlined />; break;
+      default: icon = <UserOutlined />; break;
+    }
+    return { ...config, icon };
+  };
+
+  const handleCompleteTask = (id: string) => {
     dispatch(completeAgendaTask(id));
-};
+  };
 
   return (
     <div style={{ marginTop: 32 }}>
