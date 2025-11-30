@@ -1,36 +1,38 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { fetchDbNotifications, markNotificationRead } from '@/services/notificationService';
+import { DbNotification } from '@/types/type';
+import { createSlice } from '@reduxjs/toolkit';
 
 export type NotificationType = 'success' | 'info' | 'warning' | 'error' | 'open';
 
-interface NotificationPayload {
-  key?: string;
-  message: string;
-  description?: string;
-  type?: NotificationType;
-  duration?: number;
-  progress?: number; 
-}
-
 interface NotificationState {
-  latestNotification: NotificationPayload | null;
+  items: DbNotification[];
+  unreadCount: number;
 }
-
 const initialState: NotificationState = {
-  latestNotification: null,
+  items: [],
+  unreadCount: 0,
 };
 
 const notificationSlice = createSlice({
   name: 'notification',
-  initialState,
-  reducers: {
-    showNotification: (state, action: PayloadAction<NotificationPayload>) => {
-      if (!action.payload.key) {
-        action.payload.key = Date.now().toString();
+  initialState: {
+    items: [] as DbNotification[],
+    unreadCount: 0,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchDbNotifications.fulfilled, (state, action) => {
+      state.items = action.payload;
+      state.unreadCount = action.payload.filter(n => !n.isRead).length;
+    });
+    builder.addCase(markNotificationRead.fulfilled, (state, action) => {
+      const item = state.items.find(n => n._id === action.payload);
+      if (item && !item.isRead) {
+        item.isRead = true;
+        state.unreadCount -= 1;
       }
-      state.latestNotification = action.payload;
-    },
+    });
   },
 });
 
-export const { showNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;

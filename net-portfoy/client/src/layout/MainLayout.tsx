@@ -17,6 +17,7 @@ import { logout } from '../store/authSlice';
 import { PortfolioForm } from '../pages/Portfolios/components/PortfolioForm';
 import logo from '../../public/logo.png';
 import { MENU_KEYS, RECENT_NOTIFICATIONS, USER_MENU_KEYS } from '@/constant/Layout';
+import { markNotificationRead } from '@/services/notificationService';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -24,6 +25,7 @@ const { Text } = Typography;
 const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useAppSelector((state) => state.auth);
+  const { items: notifications, unreadCount } = useAppSelector(state => state.notification);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -80,19 +82,22 @@ const MainLayout: React.FC = () => {
   const notificationContent = (
     <List
       itemLayout="horizontal"
-      dataSource={RECENT_NOTIFICATIONS}
+      dataSource={notifications}
       renderItem={(item) => (
-        <List.Item>
+        <List.Item 
+          className={!item.isRead ? 'bg-blue-50' : ''} // Okunmamışsa renkli
+          actions={[
+              !item.isRead && <Button type="link" size="small" onClick={() => dispatch(markNotificationRead(item._id))}>Okundu</Button>
+          ]}
+        >
           <List.Item.Meta
-            avatar={<CheckCircleTwoTone twoToneColor="#52c41a" />}
-            title={<Text style={{ fontSize: 13 }}>{item.title}</Text>}
-            description={<Text type="secondary" style={{ fontSize: 11 }}>{item.desc} - {item.time}</Text>}
+            title={<Text strong={!item.isRead}>{item.title}</Text>}
+            description={item.message}
           />
         </List.Item>
-      )}
-      style={{ width: 300 }}
-      footer={<Button type="link" block size="small">Tümünü Gör</Button>}
-    />
+    )}
+    style={{ width: 350, maxHeight: 400, overflow: 'auto' }}
+  />
   );
 
   return (
@@ -147,7 +152,7 @@ const MainLayout: React.FC = () => {
               trigger="click"
               placement="bottomRight"
             >
-              <Badge count={2} size="small" offset={[-2, 2]} style={{ marginRight: 8 }}>
+              <Badge count={unreadCount} size="small" offset={[-2, 2]} style={{ marginRight: 8 }}>
                 <Button
                   shape="circle"
                   icon={<BellOutlined style={{ fontSize: 20 }} />}

@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from '../store';
 import { ConfigProvider } from 'antd';
 import trTR from 'antd/locale/tr_TR';
-import NotificationController from '@/components/NotificationController';
+import NotificationListener from '@/components/NotificationListener';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,9 +43,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       }}
     >
     <Provider store={store}>
-      <NotificationController />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
+          <NotificationListener/>
           {children}
         </BrowserRouter>
       </QueryClientProvider>

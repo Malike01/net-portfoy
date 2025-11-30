@@ -50,3 +50,12 @@ export interface DashboardData {
     isCompleted: boolean;
   }[];
 }
+export interface DbNotification {
+  _id: string;
+  title: string;
+  message: string;
+  type: 'info' | 'success' | 'warning' | 'error' | 'system';
+  isRead: boolean;
+  createdAt: string;
+  relatedId?: string;
+}
