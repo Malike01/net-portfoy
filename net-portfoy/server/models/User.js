@@ -6,7 +6,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phone: { type: String, default: '' },
+  isPhoneVerified: { type: Boolean, default: false },
   role: { type: String, default: 'admin' }, 
+  otpCode: { type: String }, 
+  otpExpires: { type: Date },
 }, { timestamps: true });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

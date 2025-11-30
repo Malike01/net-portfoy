@@ -1,8 +1,8 @@
 import React from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../store/hooks';
-import { setCredentials } from '../store/authSlice';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { login, setCredentials } from '../store/authSlice';
 import api from '../services/api';
 import { Form, Input, Button, Card, Alert, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined, HomeTwoTone } from '@ant-design/icons';
@@ -12,31 +12,16 @@ const { Title, Text } = Typography;
 const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [messageApi, contextHolder] = message.useMessage(); 
 
-  const loginMutation = useMutation({
-    mutationFn: async (values: any) => {
-      const response = await api.post('/auth/login', values);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      dispatch(setCredentials(data));
-      messageApi.success('Giriş başarılı, yönlendiriliyorsunuz...');
-      setTimeout(() => navigate('/'), 500); 
-    },
-    onError: (err: any) => {
-      console.error(err);
-    },
-  });
+  const { user, isLoading, isError, message } = useAppSelector((state) => state.auth);
+
 
   const onFinish = (values: any) => {
-    loginMutation.mutate(values);
+     dispatch(login({ email: values.email, password: values.password }));
   };
-
+  
   return (
     <div className="flex h-screen w-full items-center justify-center bg-gray-50">
-      {contextHolder}
-      
       <Card 
         className="w-full max-w-md shadow-xl border-0" 
         styles={{ body: { padding: '2rem' } }}
@@ -49,11 +34,11 @@ const Login: React.FC = () => {
           <Text type="secondary">Portföy ve Müşteri Yönetim Paneli</Text>
         </div>
 
-        {loginMutation.isError && (
+        {isError && (
           <Alert
             message="Giriş Hatası"
             description={
-              (loginMutation.error as any)?.response?.data?.message || 
+              message || 
               "Sunucuya bağlanılamadı."
             }
             type="error"
@@ -98,7 +83,7 @@ const Login: React.FC = () => {
               type="primary" 
               htmlType="submit" 
               block 
-              loading={loginMutation.isPending}
+              loading={isLoading}
               className="mt-2"
             >
               Giriş Yap

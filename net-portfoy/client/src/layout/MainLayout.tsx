@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu, Button, Avatar, Dropdown, theme, Typography, List, Popover, Badge } from 'antd';
 import {
@@ -18,6 +18,7 @@ import { PortfolioForm } from '../pages/Portfolios/components/PortfolioForm';
 import logo from '../../public/logo.png';
 import { MENU_KEYS, RECENT_NOTIFICATIONS, USER_MENU_KEYS } from '@/constant/Layout';
 import { markNotificationRead } from '@/services/notificationService';
+import PhoneVerificationModal from '@/components/PhoneVerificationModal';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -31,6 +32,8 @@ const MainLayout: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isVerificationModalOpen, setVerificationModalOpen] = useState(false);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -40,39 +43,45 @@ const MainLayout: React.FC = () => {
     navigate('/login');
   };
 
+  useEffect(() => {
+    if (user && !user.isPhoneVerified) {
+      setVerificationModalOpen(true);
+    }
+  }, [user]);
+
   const menuItems = [
     {
-      key: MENU_KEYS.DASHBOARD,
+      key: MENU_KEYS.DASHBOARD.path,
       icon: <ProductOutlined />,
-      label: 'Genel Bakış',
-      onClick: () => navigate(MENU_KEYS.DASHBOARD),
+      label: MENU_KEYS.DASHBOARD.title,
+      onClick: () => navigate(MENU_KEYS.DASHBOARD.path),
     },
     {
-      key: MENU_KEYS.PORTFOLIOS,
+      key: MENU_KEYS.PORTFOLIOS.path,
       icon: <HomeOutlined />,
-      label: 'Portföyler',
-      onClick: () => navigate(MENU_KEYS.PORTFOLIOS),
+      label: MENU_KEYS.PORTFOLIOS.title,
+      onClick: () => navigate(MENU_KEYS.PORTFOLIOS.path),
     },
     {
-      key: MENU_KEYS.CUSTOMERS,
+      key: MENU_KEYS.CUSTOMERS.path,
       icon: <UserOutlined />,
-      label: 'Müşteriler',
-      onClick: () => navigate(MENU_KEYS.CUSTOMERS),
+      label: MENU_KEYS.CUSTOMERS.title,
+      onClick: () => navigate(MENU_KEYS.CUSTOMERS.path),
     },
   ];
 
   const userMenuPoints = [
     {
-      key: USER_MENU_KEYS.SETTINGS,
-      label: 'Hesap Ayarları',
+      key: USER_MENU_KEYS.SETTINGS.key,
+      label: USER_MENU_KEYS.SETTINGS.title,
       icon: <SettingOutlined />,
     },
     {
       type: 'divider',
     },
     {
-      key: USER_MENU_KEYS.LOGOUT,
-      label: 'Çıkış Yap',
+      key: USER_MENU_KEYS.LOGOUT.key,
+      label: USER_MENU_KEYS.LOGOUT.title,
       icon: <LogoutOutlined />,
       danger: true,
       onClick: handleLogout,
@@ -85,7 +94,7 @@ const MainLayout: React.FC = () => {
       dataSource={notifications}
       renderItem={(item) => (
         <List.Item 
-          className={!item.isRead ? 'bg-blue-50' : ''} // Okunmamışsa renkli
+          className={!item.isRead ? 'bg-blue-50' : ''} 
           actions={[
               !item.isRead && <Button type="link" size="small" onClick={() => dispatch(markNotificationRead(item._id))}>Okundu</Button>
           ]}
@@ -102,6 +111,10 @@ const MainLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
+      <PhoneVerificationModal 
+        open={isVerificationModalOpen} 
+        onClose={() => setVerificationModalOpen(false)} 
+      />
       <Sider
         trigger={null}
         collapsible

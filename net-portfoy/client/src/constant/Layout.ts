@@ -4,12 +4,27 @@ export const RECENT_NOTIFICATIONS = [
 ];
 
 export const MENU_KEYS = {
-    DASHBOARD: '/',
-    PORTFOLIOS: '/portfolios',
-    CUSTOMERS: '/customers',
+    DASHBOARD: {
+        path: '/',
+        title: 'Genel Bakış',
+    },
+    PORTFOLIOS:{
+        path: '/portfolios',
+        title: 'Portföyler',
+    },
+    CUSTOMERS: {
+        path: '/customers',
+        title: 'Müşteriler',
+    },
 };
 
 export const USER_MENU_KEYS = {
-    SETTINGS: '1',
-    LOGOUT: '2',
+    SETTINGS:{
+        key: '1',
+        title: 'Hesap Ayarları',
+    },
+    LOGOUT: {
+        key: '2',
+        title: 'Çıkış Yap',
+    }
 };
