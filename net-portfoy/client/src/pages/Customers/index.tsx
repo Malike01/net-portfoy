@@ -8,6 +8,7 @@ import { setIsCustomerModalOpen } from '@/store/customersSlice';
 import { CUSTOMER_STATUS_OPTIONS, CUSTOMER_TYPE_OPTIONS } from '@/constant/Customers';
 import { deleteCustomer, getCustomers } from '@/services/customerService';
 import { useNavigate } from 'react-router-dom';
+import styles from './Customers.module.css';
 
 const { Title, Text } = Typography;
 
@@ -15,17 +16,17 @@ const Customers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const { customers, isLoading, isCustomerModalOpen } = useAppSelector((state) => state.customers);
 
-  const dispatch = useAppDispatch(); 
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const filteredCustomers = customers.filter(c => 
+  const filteredCustomers = customers.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.phone.includes(searchTerm)
   );
 
 
   const handleDelete = (id: number) => {
-   Modal.confirm({
+    Modal.confirm({
       title: 'Silmek istediğinize emin misiniz?',
       content: 'Bu işlem geri alınamaz.',
       okType: 'danger',
@@ -47,31 +48,23 @@ const Customers: React.FC = () => {
         const typeOption = CUSTOMER_TYPE_OPTIONS.find(opt => opt.value === record.customerType);
         return (
           <Space>
-            <Avatar 
-              style={{ backgroundColor: typeOption?.color || '#2563eb' }} 
-              icon={record.customerType === 'seller' ? <ShopOutlined /> : <UserOutlined />} 
+            <Avatar
+              style={{ backgroundColor: typeOption?.color || '#2563eb' }}
+              icon={record.customerType === 'seller' ? <ShopOutlined /> : <UserOutlined />}
             />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <div className={styles.customerInfo}>
+              <div className={styles.nameContainer}>
                 <Text strong>{record.name}</Text>
                 {typeOption && (
-                  <Tag 
-                    color={typeOption.color} 
-                    style={{ 
-                      margin: 0, 
-                      fontSize: 14, 
-                      lineHeight: '18px', 
-                      padding: '12 12px', 
-                      borderRadius: 12, 
-                      border: 'none',
-                      fontWeight: 500
-                    }}
+                  <Tag
+                    color={typeOption.color}
+                    className={styles.tag}
                   >
                     {typeOption.label}
                   </Tag>
                 )}
               </div>
-              <Text type="secondary" style={{ fontSize: 12 }}>{record.email}</Text>
+              <Text type="secondary" className={styles.email}>{record.email}</Text>
             </div>
           </Space>
         );
@@ -100,9 +93,9 @@ const Customers: React.FC = () => {
       key: 'portfolio',
       render: (_: any, record: CustomerItem) => (
         record.portfolioTitle ? (
-            <Tag icon={<HomeOutlined />} color="blue" style={{ cursor: 'pointer' }}>
-                {record.portfolioTitle}
-            </Tag>
+          <Tag icon={<HomeOutlined />} color="blue" className={styles.portfolioTag}>
+            {record.portfolioTitle}
+          </Tag>
         ) : <Text type="secondary">-</Text>
       )
     },
@@ -111,19 +104,19 @@ const Customers: React.FC = () => {
       key: 'actions',
       render: (_: any, record: CustomerItem) => (
         <Space>
-          <Button 
-            type="text" 
-            icon={<EditOutlined />} 
-            onClick={() => { 
-                navigate(`/customers/${(record as any)._id || record._id}`)
-                dispatch(setIsCustomerModalOpen(true)); 
-            }} 
+          <Button
+            type="text"
+            icon={<EditOutlined />}
+            onClick={() => {
+              navigate(`/customers/${(record as any)._id || record._id}`)
+              dispatch(setIsCustomerModalOpen(true));
+            }}
           />
-          <Button 
-            type="text" 
-            danger 
-            icon={<DeleteOutlined />} 
-            onClick={() => handleDelete((record as any)._id)} 
+          <Button
+            type="text"
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => handleDelete((record as any)._id)}
           />
         </Space>
       ),
@@ -132,42 +125,42 @@ const Customers: React.FC = () => {
 
   return (
     <>
-      <div style={{ paddingBottom: 80 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
-          <Title level={2} style={{ margin: 0 }}>Müşteriler</Title>
-          <div style={{ display: 'flex', gap: 12 }}>
-              <Input 
-                  placeholder="İsim veya telefon ara..." 
-                  prefix={<SearchOutlined />} 
-                  style={{ width: 250 }}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Button type="primary" icon={<PlusOutlined />} onClick={() => { 
-                navigate('/customers/new'); 
-                dispatch(setIsCustomerModalOpen(true)); 
-                }}>
-                  Müşteri Ekle
-              </Button>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <Title level={2} className={styles.title}>Müşteriler</Title>
+          <div className={styles.actions}>
+            <Input
+              placeholder="İsim veya telefon ara..."
+              prefix={<SearchOutlined />}
+              className={styles.searchInput}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => {
+              navigate('/customers/new');
+              dispatch(setIsCustomerModalOpen(true));
+            }}>
+              Müşteri Ekle
+            </Button>
           </div>
         </div>
-        <Table 
-          columns={columns} 
-          dataSource={filteredCustomers} 
+        <Table
+          columns={columns}
+          dataSource={filteredCustomers}
           rowKey="id"
           pagination={{ pageSize: 6 }}
-          scroll={{ x: 600 }} 
+          scroll={{ x: 600 }}
           loading={isLoading}
         />
-        <FloatButton 
-          type="primary" 
-          icon={<PlusOutlined />} 
-          onClick={() => { 
+        <FloatButton
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => {
             navigate('/customers/new')
-            dispatch(setIsCustomerModalOpen(true)); 
+            dispatch(setIsCustomerModalOpen(true));
           }}
-          style={{ right: 24, bottom: 24 }}
+          className={styles.floatButton}
         />
-        { isCustomerModalOpen && <CustomerForm /> }
+        {isCustomerModalOpen && <CustomerForm />}
       </div>
     </>
   );

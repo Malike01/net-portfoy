@@ -12,7 +12,7 @@ import styles from './Dashboard.module.css';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/tr';
-import {  fetchDashboardStats } from '@/services/dashboardService';
+import { fetchDashboardStats } from '@/services/dashboardService';
 
 const { Title } = Typography;
 
@@ -39,11 +39,7 @@ const Dashboard: React.FC = () => {
         <div className={styles.widgetsContainer}>
           <div className={styles.widgetCard}>
             <div
-              className={styles.iconBox}
-              style={{
-                background: '#e6f7ff',
-                color: '#1890ff',
-              }}
+              className={`${styles.iconBox} ${styles.iconBoxBlue}`}
             >
               <CalendarOutlined />
             </div>
@@ -55,11 +51,7 @@ const Dashboard: React.FC = () => {
 
           <div className={styles.widgetCard}>
             <div
-              className={styles.iconBox}
-              style={{
-                background: '#eec0b5ff',
-                color: '#9b2424ff',
-              }}
+              className={`${styles.iconBox} ${styles.iconBoxRed}`}
             >
               <PhoneOutlined />
             </div>

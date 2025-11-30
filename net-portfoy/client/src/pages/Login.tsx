@@ -6,6 +6,7 @@ import { login, setCredentials } from '../store/authSlice';
 import api from '../services/api';
 import { Form, Input, Button, Card, Alert, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined, HomeTwoTone } from '@ant-design/icons';
+import styles from './Login.module.css';
 
 const { Title, Text } = Typography;
 
@@ -21,16 +22,16 @@ const Login: React.FC = () => {
   };
   
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gray-50">
+    <div className={styles.container}>
       <Card 
-        className="w-full max-w-md shadow-xl border-0" 
+        className={styles.card} 
         styles={{ body: { padding: '2rem' } }}
       >
-        <div className="flex flex-col items-center mb-8 text-center">
-          <div className="p-3 bg-blue-50 rounded-full mb-3">
-             <HomeTwoTone style={{ fontSize: '32px' }} twoToneColor="#2563eb"/>
+        <div className={styles.header}>
+          <div className={styles.iconContainer}>
+             <HomeTwoTone className={styles.icon} twoToneColor="#2563eb"/>
           </div>
-          <Title level={3} style={{ margin: 0, color: '#1f2937' }}>NetPortfoy</Title>
+          <Title level={3} className={styles.title}>NetPortfoy</Title>
           <Text type="secondary">Portföy ve Müşteri Yönetim Paneli</Text>
         </div>
 
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
             }
             type="error"
             showIcon
-            className="mb-6"
+            className={styles.alert}
           />
         )}
 
@@ -63,7 +64,7 @@ const Login: React.FC = () => {
             ]}
           >
             <Input 
-              prefix={<UserOutlined className="text-gray-400" />} 
+              prefix={<UserOutlined className={styles.inputIcon} />} 
               placeholder="ornek@emlak.com" 
             />
           </Form.Item>
@@ -74,7 +75,7 @@ const Login: React.FC = () => {
             rules={[{ required: true, message: 'Lütfen şifrenizi girin!' }]}
           >
             <Input.Password 
-              prefix={<LockOutlined className="text-gray-400" />} 
+              prefix={<LockOutlined className={styles.inputIcon} />} 
               placeholder="••••••" 
             />
           </Form.Item>
@@ -84,15 +85,15 @@ const Login: React.FC = () => {
               htmlType="submit" 
               block 
               loading={isLoading}
-              className="mt-2"
+              className={styles.submitButton}
             >
               Giriş Yap
             </Button>
           </Form.Item>
         </Form>
         
-        <div className="text-center mt-4">
-          <Text type="secondary" style={{ fontSize: '12px' }}>
+        <div className={styles.footer}>
+          <Text type="secondary" className={styles.footerText}>
             © 2025 NetPortfoy CRM Sistemi
           </Text>
         </div>

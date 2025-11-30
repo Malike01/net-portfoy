@@ -1,0 +1,59 @@
+.customerInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.nameContainer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tag {
+    margin: 0;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 4px 12px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 500;
+}
+
+.email {
+    font-size: 12px;
+}
+
+.portfolioTag {
+    cursor: pointer;
+}
+
+.container {
+    padding-bottom: 80px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.title {
+    margin: 0;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+}
+
+.searchInput {
+    width: 250px;
+}
+
+.floatButton {
+    right: 24px;
+    bottom: 24px;
+}

@@ -1,0 +1,15 @@
+.row {
+    display: flex;
+    gap: 16px;
+}
+
+.flexItem {
+    flex: 1;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}

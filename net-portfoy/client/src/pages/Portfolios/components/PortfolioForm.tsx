@@ -10,6 +10,7 @@ import { truncateText } from '@/utils';
 import { setIsCustomerModalOpen } from '@/store/customersSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { createPortfolio, fetchPortfolioById, updatePortfolio } from '@/services/portfolioService';
+import styles from '../Portfolios.module.css';
 
 export const PortfolioForm: React.FC = () => {
   const [form] = Form.useForm();
@@ -136,21 +137,21 @@ export const PortfolioForm: React.FC = () => {
           <Input placeholder="Örn: Deniz Manzaralı 3+1" maxLength={25} />
         </Form.Item>
 
-        <div style={{ display: 'flex', gap: 16 }}>
-          <Form.Item name="price" label="Fiyat" style={{ flex: 1 }} rules={[{ required: true }]}>
-            <InputNumber defaultValue={0} style={{ width: '100%' }} formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />
+        <div className={styles.row}>
+          <Form.Item name="price" label="Fiyat" className={styles.flexItem} rules={[{ required: true }]}>
+            <InputNumber defaultValue={0} className={styles.fullWidth} formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')} />
           </Form.Item>
-          <Form.Item name="currency" label="Birim" style={{ width: 100 }} initialValue="TL">
+          <Form.Item name="currency" label="Birim" className={styles.currencySelect} initialValue="TL">
             <Select options={CURRENCY_OPTIONS} />
           </Form.Item>
         </div>
-        <Form.Item name="status" label="Durum" style={{ flex: 1 }} initialValue="Satılık">
+        <Form.Item name="status" label="Durum" className={styles.flexItem} initialValue="Satılık">
           <Select options={PORTFOLIO_STATUS_OPTIONS} />
         </Form.Item>
         <Form.Item name="description" label="Açıklama">
           <Input.TextArea rows={3} maxLength={50} placeholder='İlan hakkında kısa bir açıklama...' />
         </Form.Item>
-        <div style={{ display: 'flex', gap: 52 }}>
+        <div className={styles.typeRow}>
           <Form.Item name="portfolioType" label="Portföy Tipi" rules={[{ required: true }]}>
             <Radio.Group
               block
@@ -177,7 +178,7 @@ export const PortfolioForm: React.FC = () => {
           <Input
             size="large"
             placeholder="https://www.sahibinden.com/ilan/..."
-            prefix={<LinkOutlined style={{ color: '#F9C623' }} />}
+            prefix={<LinkOutlined className={styles.sahibindenIcon} />}
             allowClear
           />
         </Form.Item>
@@ -189,7 +190,7 @@ export const PortfolioForm: React.FC = () => {
           <Input
             size="large"
             placeholder="https://www.hepsiemlak.com/..."
-            prefix={<HomeOutlined style={{ color: '#d9232e' }} />}
+            prefix={<HomeOutlined className={styles.hepsiemlakIcon} />}
             allowClear
           />
         </Form.Item>
@@ -201,7 +202,7 @@ export const PortfolioForm: React.FC = () => {
           <Input
             size="large"
             placeholder="https://www.emlakjet.com/..."
-            prefix={<GlobalOutlined style={{ color: '#2ecc71' }} />}
+            prefix={<GlobalOutlined className={styles.emlakjetIcon} />}
             allowClear
           />
         </Form.Item>
@@ -218,7 +219,7 @@ export const PortfolioForm: React.FC = () => {
             popupRender={(menu) => (
               <>
                 {menu}
-                <Divider style={{ margin: '8px 0' }} />
+                <Divider className={styles.divider} />
                 <Button type="text" icon={<PlusOutlined />} onClick={() => {
                   dispatch(setIsCustomerModalOpen(true))
                 }}>
@@ -229,7 +230,7 @@ export const PortfolioForm: React.FC = () => {
           />
         </Form.Item>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
+        <div className={styles.footer}>
           <Button onClick={() => dispatch(setIsPortfolioModalOpen(false))}>İptal</Button>
           <Button type="primary" htmlType="submit">
             {isEditMode ? 'Güncelle' : 'Kaydet'}

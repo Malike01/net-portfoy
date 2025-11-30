@@ -19,3 +19,64 @@
     /* Primary color or similar */
     background-color: rgba(0, 0, 0, 0.05);
 }
+
+.card {
+    height: auto;
+    margin-bottom: 16px;
+}
+
+.coverContainer {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+}
+
+.statusTag {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    margin: 0;
+}
+
+.title {
+    font-size: 16px;
+    line-height: 1.2;
+    flex: 1;
+}
+
+.moreIcon {
+    font-size: 18px;
+}
+
+.typeText {
+    font-size: 12px;
+}
+
+.priceText {
+    font-size: 14px;
+    /* color: primary color handled inline or via variable */
+}
+
+.description {
+    font-size: 12px;
+}
+
+.footer {
+    margin-top: 8px;
+}
+
+.sahibindenIcon {
+    color: #F9C623;
+}
+
+.hepsiemlakIcon {
+    color: #d9232e;
+}
+
+.emlakjetIcon {
+    color: #2ecc71;
+}
+
+.customerCount {
+    font-size: 12px;
+}

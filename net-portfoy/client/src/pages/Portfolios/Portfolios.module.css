@@ -1,0 +1,57 @@
+.filterContainer {
+    width: 300px;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.clearFilterButton {
+    padding: 0;
+    align-self: flex-end;
+}
+
+.row {
+    display: flex;
+    gap: 16px;
+}
+
+.flexItem {
+    flex: 1;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.currencySelect {
+    width: 100px;
+}
+
+.typeRow {
+    display: flex;
+    gap: 52px;
+}
+
+.sahibindenIcon {
+    color: #F9C623;
+}
+
+.hepsiemlakIcon {
+    color: #d9232e;
+}
+
+.emlakjetIcon {
+    color: #2ecc71;
+}
+
+.divider {
+    margin: 8px 0;
+}
+
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}

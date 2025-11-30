@@ -7,6 +7,7 @@ import { setIsCustomerModalOpen } from '@/store/customersSlice';
 import dayjs from 'dayjs';
 import { createCustomer, updateCustomer } from '@/services/customerService';
 import { useParams } from 'react-router-dom';
+import styles from './CustomerForm.module.css';
 
 
 export const CustomerForm: React.FC = () => {
@@ -80,11 +81,11 @@ export const CustomerForm: React.FC = () => {
             buttonStyle="solid"
           />
         </Form.Item>
-        <div style={{ display: 'flex', gap: 16 }}>
-          <Form.Item name="phone" label="Telefon" style={{ flex: 1 }} rules={[{ required: true, pattern: REGEX.PHONE }]}>
+        <div className={styles.row}>
+          <Form.Item name="phone" label="Telefon" className={styles.flexItem} rules={[{ required: true, pattern: REGEX.PHONE }]}>
             <Input placeholder="05XX XXX XX XX" />
           </Form.Item>
-          <Form.Item name="status" label="Durum" style={{ flex: 1 }}>
+          <Form.Item name="status" label="Durum" className={styles.flexItem}>
             <Select showSearch={{ optionFilterProp: 'label', onSearch }} options={CUSTOMER_STATUS_OPTIONS} />
           </Form.Item>
         </div>
@@ -114,7 +115,7 @@ export const CustomerForm: React.FC = () => {
           />
         </Form.Item>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
+        <div className={styles.footer}>
           <Button onClick={() => dispatch(setIsCustomerModalOpen(false))}>İptal</Button>
           <Button type="primary" htmlType="submit">
             {isEditMode ? 'Güncelle' : 'Kaydet'}

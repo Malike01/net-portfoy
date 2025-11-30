@@ -45,6 +45,16 @@
     margin-right: 12px;
 }
 
+.iconBoxBlue {
+    background: #e6f7ff;
+    color: #1890ff;
+}
+
+.iconBoxRed {
+    background: #eec0b5ff;
+    color: #9b2424ff;
+}
+
 .widgetTitle {
     font-size: 12px;
     color: #8c8c8c;

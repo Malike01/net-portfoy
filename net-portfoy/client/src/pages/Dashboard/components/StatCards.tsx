@@ -9,7 +9,7 @@ import {
   ArrowDownOutlined,
   MinusOutlined
 } from '@ant-design/icons';
-import styles from './StatCards.module.css';
+import styles from './styles/StatCards.module.css';
 import { useAppSelector } from '@/store/hooks';
 import { formatCurrency } from '@/utils';
 import { STAT_CARD_CONFIG, TREND_COLORS } from '@/constant/Dashboard';

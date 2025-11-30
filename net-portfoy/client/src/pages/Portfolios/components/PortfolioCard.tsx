@@ -23,7 +23,7 @@ function PortfolioCard(props: PortfolioCardProps) {
     const navigate = useNavigate();
 
     const { customers } = useAppSelector((state) => state.customers);
-    
+
     const removeItem = (removeKey: React.Key) => {
         dispatch(deletePortfolio(removeKey as number));
     };
@@ -32,10 +32,9 @@ function PortfolioCard(props: PortfolioCardProps) {
         <Card
             className={styles.card}
             size="small"
-            style={{ height: 'auto', marginBottom: 16 }}
             hoverable
             cover={
-                <div style={{ position: 'relative', height: 160, overflow: 'hidden' }}>
+                <div className={styles.coverContainer}>
                     <img
                         alt="portfolio"
                         className={styles.portfolioImage}
@@ -43,7 +42,7 @@ function PortfolioCard(props: PortfolioCardProps) {
                     />
                     <Tag
                         color={PORTFOLIO_STATUS_OPTIONS.find(s => s.value === props.data?.status)?.color}
-                        style={{ position: 'absolute', top: 8, left: 8, margin: 0 }}
+                        className={styles.statusTag}
                     >
                         {PORTFOLIO_STATUS_OPTIONS.find(s => s.value === props.data?.status)?.label}
                     </Tag>
@@ -51,7 +50,7 @@ function PortfolioCard(props: PortfolioCardProps) {
             }>
             <Flex vertical gap={8}>
                 <Flex justify="space-between" align="start">
-                    <Text strong style={{ fontSize: 16, lineHeight: 1.2, flex: 1 }}>{props.data?.title}</Text>
+                    <Text strong className={styles.title}>{props.data?.title}</Text>
                     <Dropdown
                         menu={{
                             items: [
@@ -79,50 +78,50 @@ function PortfolioCard(props: PortfolioCardProps) {
                             className={styles.actionButton}
                             size="small"
                             type="text"
-                            icon={<MoreOutlined style={{ fontSize: '18px' }} />}
+                            icon={<MoreOutlined className={styles.moreIcon} />}
                         />
                     </Dropdown>
                 </Flex>
 
                 <Flex align="center" gap={4}>
-                    <Text type="secondary" style={{ fontSize: 12 }}>
+                    <Text type="secondary" className={styles.typeText}>
                         {PORTFOLIO_TYPE_OPTIONS.find(t => t.value === props.data?.portfolioType)?.label}
                     </Text>
                     <Text type="secondary">•</Text>
-                    <Text strong style={{ fontSize: 14, color: token.colorPrimary }}>
+                    <Text strong className={styles.priceText} style={{ color: token.colorPrimary }}>
                         {props.data?.currency &&
                             new Intl.NumberFormat('tr-TR', { style: 'currency', currency: props.data?.currency === 'TL' ? 'TRY' : props.data?.currency, }).format(props.data?.price)}
                     </Text>
                 </Flex>
 
-                <Text type="secondary" style={{ fontSize: 12 }}>
+                <Text type="secondary" className={styles.description}>
                     {truncateText(props.data?.description, 80)}
                 </Text>
 
-                <Flex justify="space-between" align="center" style={{ marginTop: 8 }}>
+                <Flex justify="space-between" align="center" className={styles.footer}>
                     <Space size="small">
                         {props.data?.externalLinks?.sahibinden && (
                             <Tooltip title="Sahibinden">
-                                <Button type="text" size="small" icon={<LinkOutlined style={{ color: '#F9C623' }} />} href={props.data?.externalLinks?.sahibinden} target="_blank" />
+                                <Button type="text" size="small" icon={<LinkOutlined className={styles.sahibindenIcon} />} href={props.data?.externalLinks?.sahibinden} target="_blank" />
                             </Tooltip>
                         )}
                         {props.data?.externalLinks?.hepsiemlak && (
                             <Tooltip title="Hepsiemlak">
-                                <Button type="text" size="small" icon={<HomeOutlined style={{ color: '#d9232e' }} />} href={props.data?.externalLinks?.hepsiemlak} target="_blank" />
+                                <Button type="text" size="small" icon={<HomeOutlined className={styles.hepsiemlakIcon} />} href={props.data?.externalLinks?.hepsiemlak} target="_blank" />
                             </Tooltip>
                         )}
                         {props.data?.externalLinks?.emlakjet && (
                             <Tooltip title="Emlakjet">
-                                <Button type="text" size="small" icon={<GlobalOutlined style={{ color: '#2ecc71' }} />} href={props.data?.externalLinks?.emlakjet} target="_blank" />
+                                <Button type="text" size="small" icon={<GlobalOutlined className={styles.emlakjetIcon} />} href={props.data?.externalLinks?.emlakjet} target="_blank" />
                             </Tooltip>
                         )}
                     </Space>
 
                     {props.data?.matchedCustomers.length > 0 && (
-                        <Tooltip title={`${ customers.find(c => props.data?.matchedCustomers?.includes(c._id))?.name} Eşleşen Müşteri`}>
+                        <Tooltip title={`${customers.find(c => props.data?.matchedCustomers?.includes(c._id))?.name} Eşleşen Müşteri`}>
                             <Flex align="center" gap={4}>
-                                <UserOutlined style={{ color: token.colorTextSecondary}} />
-                                <Text type="secondary" style={{ fontSize: 12 }}>{
+                                <UserOutlined style={{ color: token.colorTextSecondary }} />
+                                <Text type="secondary" className={styles.customerCount}>{
                                     props.data?.matchedCustomers.length
                                 }
                                 </Text>
