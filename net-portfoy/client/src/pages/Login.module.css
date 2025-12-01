@@ -1,0 +1,175 @@
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Optional: Add some background shapes for visual interest */
+.container::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.container::after {
+    content: '';
+    position: absolute;
+    bottom: -10%;
+    right: -10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(118, 75, 162, 0.1) 0%, rgba(118, 75, 162, 0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.02);
+    border-radius: 24px;
+    z-index: 1;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Override Ant Design Card Body Padding */
+.card :global(.ant-card-body) {
+    padding: 3rem !important;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.iconContainer:hover {
+    transform: scale(1.05) rotate(5deg);
+}
+
+.icon {
+    font-size: 32px;
+    color: #2563eb;
+}
+
+.title {
+    margin: 0 !important;
+    color: #111827 !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.025em;
+    font-size: 1.875rem !important;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.alert {
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+}
+
+.formItem {
+    margin-bottom: 1.5rem;
+}
+
+.inputIcon {
+    color: #9ca3af;
+    transition: color 0.3s;
+}
+
+/* Target Ant Design Input styles */
+.card :global(.ant-input-affix-wrapper) {
+    padding: 12px 16px;
+    border-radius: 12px;
+    border-color: #e5e7eb;
+    background-color: #f9fafb;
+    transition: all 0.3s;
+}
+
+.card :global(.ant-input-affix-wrapper:hover),
+.card :global(.ant-input-affix-wrapper:focus),
+.card :global(.ant-input-affix-wrapper-focused) {
+    border-color: #2563eb;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.card :global(.ant-input-affix-wrapper:focus) .inputIcon,
+.card :global(.ant-input-affix-wrapper-focused) .inputIcon {
+    color: #2563eb;
+}
+
+.submitButton {
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+    transition: all 0.3s;
+    margin-top: 1rem;
+}
+
+.submitButton:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.footerText {
+    font-size: 0.875rem;
+    color: #9ca3af;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

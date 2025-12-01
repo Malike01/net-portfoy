@@ -9,20 +9,22 @@ connectDB();
 
 const importData = async () => {
   try {
-    await User.deleteMany(); 
+    await User.deleteMany();
 
+    const passwordToHash = process.env.TEST_USER_PASSWORD || '123456'; 
+    
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('123456', salt);
+    const hashedPassword = await bcrypt.hash(passwordToHash, salt);
 
     await User.create({
-      name: 'Admin',
-      email: 'admin@emlak.com',
+      name: 'Admin User',
+      email: process.env.TEST_USER_EMAIL || 'admin@emlak.com', 
       password: hashedPassword,
-      phone:'',
       role: 'admin',
+      isPhoneVerified: true
     });
 
-    console.log('Kullanıcı Eklendi!');
+    console.log('Kullanıcı (ENV verileriyle) Eklendi!');
     process.exit();
   } catch (error) {
     console.error(`${error}`);

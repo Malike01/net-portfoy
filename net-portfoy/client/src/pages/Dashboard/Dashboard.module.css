@@ -1,0 +1,78 @@
+.container {
+    padding-bottom: 24px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.title {
+    margin: 0 !important;
+}
+
+.widgetsContainer {
+    display: flex;
+    gap: 16px;
+}
+
+.widgetCard {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 16px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.widgetCard:hover {
+    transform: translateY(-2px);
+}
+
+.iconBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    font-size: 20px;
+    margin-right: 12px;
+}
+
+.iconBoxBlue {
+    background: #e6f7ff;
+    color: #1890ff;
+}
+
+.iconBoxRed {
+    background: #eec0b5ff;
+    color: #9b2424ff;
+}
+
+.widgetTitle {
+    font-size: 12px;
+    color: #8c8c8c;
+    font-weight: 600;
+}
+
+.widgetValue {
+    font-size: 20px;
+    font-weight: 700;
+    color: #262626;
+    line-height: 1;
+}
+
+.divider {
+    margin: 0 0 24px 0 !important;
+}
+
+.floatButton {
+    right: 24px;
+    bottom: 24px;
+}

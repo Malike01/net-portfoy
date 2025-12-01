@@ -1,50 +1,80 @@
-# 🏡 NetPortfoy (Real Estate CRM)
+# NetPortfoy - Real Estate CRM System 🏠
 
-**NetPortfoy** is a comprehensive Customer Relationship Management (CRM) system designed specifically for real estate consultants. Built with the **MERN Stack** (MongoDB, Express, React, Node.js) and fully typed with **TypeScript**, it provides a robust platform to manage property portfolios, client interactions, and sales processes.
+**NetPortfoy** is a comprehensive CRM (Customer Relationship Management) application designed for real estate consultants to manage portfolio management, customer relationships, and sales processes from a single, efficient, and modern interface.
 
-## 🌟 Features
+## 🌟 Key Features
 
-- **Interactive Dashboard:** Visualize monthly sales, active listings, and customer acquisition metrics at a glance.
-- **Portfolio Management:** Create, edit, and archive property listings with image upload support.
-- **Lead Tracking:** Manage potential buyers/tenants, log communication history, and set follow-up reminders.
-- **Advanced Filtering:** Search properties by price, location, type, and status (For Sale/Rent).
-- **Role-Based Access:** Secure authentication/authorization for Admins and Consultants (JWT).
-- **Responsive Design:** Fully responsive UI suitable for desktop and tablet use.
+### 🔐 Security & Authentication
+
+- **JWT Based Session:** Secure login system with a 1-hour auto-logout session timeout.
+- **SMS Verification (OTP):** Phone verification system integrated with Twilio. Includes a "Nag Screen" (Reminder Modal) for unverified users.
+- **Role Management:** Infrastructure for Admin and Consultant authorization.
+
+### 📊 Smart Dashboard
+
+- **KPI Cards:** Total portfolio value, active listings, and monthly sales targets.
+- **Trend Analysis:** Dynamic indicators showing growth/decline rates compared to the previous month.
+- **Daily Agenda:** Interactive task list for tracking calls and appointments.
+
+### 🏘️ Portfolio Management
+
+- **Masonry Layout:** Aesthetic arrangement of listing cards with varying sizes (Pinterest style).
+- **Detailed Listing Form:** Support for external links (Sahibinden, Hepsiemlak), multi-currency, and detailed property features.
+- **URL-Based Management:** Shareable links for edit and create modes.
+
+### 👥 Customer Relations (CRM)
+
+- **Buyer/Seller Segmentation:** Categorize customers based on their type.
+- **Smart Matching:** Feature to match a new customer with suitable existing portfolios during registration.
+- **Status Tracking:** Visual tracking of stages like "To Call", "Offer Made", "Title Deed Process".
+
+### 🚀 Sales Pipeline
+
+- **Kanban View:** Manage sales stages using Drag & Drop technology.
+- **View Switcher:** Instant toggle between Kanban and List views.
+
+### 🔔 Notification System
+
+- **Persistent Notifications:** Notification history stored in the database.
+- **Auto-Triggers:** Smart system-generated alerts for events like "You have customers to call" or "Welcome".
+
+---
 
 ## 🛠️ Tech Stack
 
-This project is built entirely using **TypeScript** for type safety and scalability.
+This project is built using the **MERN Stack** (MongoDB, Express, React, Node.js) architecture.
 
-### Client-Side (Frontend)
+### Frontend (Client)
 
-- **React.js** (via Vite)
-- **TypeScript**
-- **React Query**
-- **Redux Toolkit** (Global State Management)
-- **Shadcn UI** or **Tailwind CSS** (Styling)
-- **React Router DOM** (Routing)
-- **ApexCharts / Recharts** (Data Visualization)
+- **Framework:** React (Vite) + TypeScript
+- **State Management:** Redux Toolkit & Context API
+- **Data Fetching:** React Query (TanStack Query) & Axios
+- **UI Library:** Ant Design (v5)
+- **Drag & Drop:** @dnd-kit
+- **Utilities:** Day.js, React Router DOM
 
-### Server-Side (Backend)
+### Backend (Server)
 
-- **Node.js**
-- **Express.js**
-- **MongoDB & Mongoose** (Data Modeling)
-- **JWT** (Authentication)
-- **Multer / Cloudinary** (Image Storage)
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Database:** MongoDB (Mongoose)
+- **Auth:** JWT (JSON Web Token) + Bcrypt
+- **SMS Service:** Twilio SDK
 
-## 🚀 Getting Started
+---
 
-Follow these steps to set up the project locally.
+## 🚀 Installation & Setup
+
+Follow the steps below to run the project in your local environment.
 
 ### Prerequisites
 
-- Node.js (v18 or higher)
-- MongoDB (Local instance or Atlas URI)
+- Node.js (v16 or higher)
+- MongoDB (Local or Atlas URI)
 
 ### 1. Clone the Repository
 
 ```bash
-git clone [https://github.com/Malike01/net-portfoy.git](https://github.com/Malike01/net-portfoy.git)
-cd net-portfoy
+git clone [https://github.com/Malike01/netportfoy.git](https://github.com/Malike01/netportfoy.git)
+cd netportfoy
 ```

@@ -1,31 +1,76 @@
-import React from 'react';
-import { Typography, Divider, FloatButton } from 'antd';
-import { FolderAddOutlined, UserAddOutlined, ThunderboltOutlined } from '@ant-design/icons';
-
+import React, { useEffect } from 'react';
+import { Typography, Divider, FloatButton, Skeleton, Tag } from 'antd';
+import { FolderAddOutlined, UserAddOutlined, ThunderboltOutlined, CalendarOutlined, PhoneOutlined } from '@ant-design/icons';
 import { StatCards } from './components/StatCards';
 import { AgendaList } from './components/AgendaList';
 import { PortfolioForm } from '../Portfolios/components/PortfolioForm';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
 import { CustomerForm } from '../Customers/components/CustomerForm';
 import { setIsCustomerModalOpen } from '@/store/customersSlice';
+import styles from './Dashboard.module.css';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/tr';
+import { fetchDashboardStats } from '@/services/dashboardService';
 
 const { Title } = Typography;
 
+dayjs.extend(relativeTime);
+dayjs.locale('tr');
+
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
-  
+
+  const { stats, isLoading } = useAppSelector((state) => state.dashboard);
+  const kpi = stats && stats.kpi || null;
+
+  useEffect(() => {
+    dispatch(fetchDashboardStats());
+  }, []);
+
+  if (isLoading && !kpi) return <div className="p-6"><Skeleton active /></div>;
+
   return (
-    <div style={{ paddingBottom: 24 }}>
-      <Title level={2}>Anasayfa</Title>
-      <Divider />
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <Title level={2} className={styles.title}>Genel Durum</Title>
+
+        <div className={styles.widgetsContainer}>
+          <div className={styles.widgetCard}>
+            <div
+              className={`${styles.iconBox} ${styles.iconBoxBlue}`}
+            >
+              <CalendarOutlined />
+            </div>
+            <div>
+              <div className={styles.widgetTitle}>Bekleyen Randevular</div>
+              <div className={styles.widgetValue}>{kpi?.pendingAppointments || 0}</div>
+            </div>
+          </div>
+
+          <div className={styles.widgetCard}>
+            <div
+              className={`${styles.iconBox} ${styles.iconBoxRed}`}
+            >
+              <PhoneOutlined />
+            </div>
+            <div>
+              <div className={styles.widgetTitle}>Aranacak Listesi</div>
+              <div className={styles.widgetValue}>{kpi?.callListCount || 0}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Divider className={styles.divider} />
+
       <StatCards />
       <AgendaList />
 
       <FloatButton.Group
         trigger="click"
         type="primary"
-        style={{ right: 24, bottom: 24 }}
+        className={styles.floatButton}
         icon={<ThunderboltOutlined />}
       >
         <FloatButton
@@ -40,8 +85,8 @@ const Dashboard: React.FC = () => {
         />
       </FloatButton.Group>
 
-      <PortfolioForm/>
-      <CustomerForm/>
+      <PortfolioForm />
+      <CustomerForm />
     </div>
   );
 };
