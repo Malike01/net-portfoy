@@ -1,9 +1,7 @@
-import React from 'react';
-import { useMutation } from '@tanstack/react-query';
+import React, { use, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { login, setCredentials } from '../store/authSlice';
-import api from '../services/api';
+import { login } from '../store/authSlice';
 import { Form, Input, Button, Card, Alert, message, Typography } from 'antd';
 import { UserOutlined, LockOutlined, HomeTwoTone } from '@ant-design/icons';
 import styles from './Login.module.css';
@@ -20,6 +18,12 @@ const Login: React.FC = () => {
   const onFinish = (values: any) => {
     dispatch(login({ email: values.email, password: values.password }));
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user]);
 
   return (
     <div className={styles.container}>
