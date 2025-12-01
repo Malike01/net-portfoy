@@ -12,7 +12,7 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, message } = useAppSelector((state) => state.auth);
+  const { user, isLoading, isError, message: authMessage } = useAppSelector((state) => state.auth);
 
 
   const onFinish = (values: any) => {
@@ -21,6 +21,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (user) {
+      message.success('Giriş başarılı, yönlendiriliyorsunuz...');
       navigate('/');
     }
   }, [user]);
@@ -43,7 +44,7 @@ const Login: React.FC = () => {
           <Alert
             message="Giriş Hatası"
             description={
-              message ||
+              authMessage ||
               "Sunucuya bağlanılamadı."
             }
             type="error"

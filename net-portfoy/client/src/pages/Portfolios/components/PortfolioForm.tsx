@@ -57,14 +57,17 @@ export const PortfolioForm: React.FC = () => {
         await dispatch(updatePortfolio({
           id: id!, data: params
         })).unwrap();
+        message.success('Portföy başarıyla güncellendi.');
       } else {
         await dispatch(createPortfolio(params)).unwrap();
+        message.success('Portföy başarıyla oluşturuldu.');
       }
       navigate('/portfolios');
+      dispatch(setIsPortfolioModalOpen(false));
     } catch (error) {
       console.error('İşlem başarısız', error);
+      message.error('İşlem sırasında bir hata oluştu.');
     }
-    dispatch(setIsPortfolioModalOpen(false));
   };
 
   const onSearch = (value: string) => {

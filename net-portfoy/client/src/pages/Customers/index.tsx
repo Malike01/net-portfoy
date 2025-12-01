@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Table, Button, Input, Tag, Space, Modal, FloatButton, Avatar } from 'antd';
+import { Typography, Table, Button, Input, Tag, Space, Modal, FloatButton, Avatar, message } from 'antd';
 import { PlusOutlined, SearchOutlined, EditOutlined, DeleteOutlined, UserOutlined, HomeOutlined, ShopOutlined } from '@ant-design/icons';
 import { CustomerForm } from './components/CustomerForm';
 import { CustomerItem } from '@/types/type';
@@ -30,8 +30,13 @@ const Customers: React.FC = () => {
       title: 'Silmek istediğinize emin misiniz?',
       content: 'Bu işlem geri alınamaz.',
       okType: 'danger',
-      onOk: () => {
-        dispatch(deleteCustomer(id));
+      onOk: async () => {
+        try {
+          await dispatch(deleteCustomer(id)).unwrap();
+          message.success('Müşteri başarıyla silindi.');
+        } catch (error) {
+          message.error('Müşteri silinirken bir hata oluştu.');
+        }
       }
     });
   };

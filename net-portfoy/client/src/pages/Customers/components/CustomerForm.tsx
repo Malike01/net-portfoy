@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Input, Select, Button, Radio } from 'antd';
+import { Modal, Form, Input, Select, Button, Radio, message } from 'antd';
 import { CUSTOMER_STATUS_OPTIONS, CUSTOMER_TYPE_OPTIONS } from '@/constant/Customers';
 import { DATE_FORMAT, REGEX } from '@/constant/General';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -21,6 +21,8 @@ export const CustomerForm: React.FC = () => {
 
   const status = Form.useWatch('status', form);
 
+  console.log('status', filteredOptions);
+
   const dispatch = useAppDispatch();
 
   const { id } = useParams();
@@ -35,7 +37,7 @@ export const CustomerForm: React.FC = () => {
         form.resetFields();
       }
     }
-  }, [open, isEditMode, form]);
+  }, [isCustomerModalOpen, isEditMode, form, customers, id]);
 
   const handleFinish = async (values: any) => {
     const selectedPortfolio = [{ id: 1, title: 'Portföy 1' }].find(p => values.portfolioId?.includes(p.id));
@@ -45,10 +47,19 @@ export const CustomerForm: React.FC = () => {
       portfolioId: selectedPortfolio ? [selectedPortfolio.id.toString()] : undefined,
     };
 
-    if (isEditMode) {
-      await dispatch(updateCustomer({ id, data: values }));
-    } else {
-      await dispatch(createCustomer(formattedValues));
+    try {
+      if (isEditMode) {
+        await dispatch(updateCustomer({ id, data: values })).unwrap();
+        message.success('Müşteri başarıyla güncellendi.');
+      } else {
+        await dispatch(createCustomer(formattedValues)).unwrap();
+        message.success('Müşteri başarıyla oluşturuldu.');
+      }
+      dispatch(setIsCustomerModalOpen(false));
+      form.resetFields();
+    } catch (error) {
+      console.error('İşlem başarısız', error);
+      message.error('İşlem sırasında bir hata oluştu.');
     }
   };
 
@@ -109,8 +120,8 @@ export const CustomerForm: React.FC = () => {
             showSearch={{ optionFilterProp: 'label', onSearch }}
             placeholder="Bir portföy seçin..."
             options={filteredOptions.map((item) => ({
-              value: item,
-              label: item,
+              value: item.id,
+              label: item.title,
             }))}
           />
         </Form.Item>

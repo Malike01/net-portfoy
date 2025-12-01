@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
 import { truncateText } from '@/utils';
 import { DeleteOutlined, EditOutlined, GlobalOutlined, HomeOutlined, LinkOutlined, MoreOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Card, Dropdown, Flex, Space, Tag, theme, Tooltip, Typography } from 'antd';
+import { Button, Card, Dropdown, Flex, Space, Tag, theme, Tooltip, Typography, message } from 'antd';
 import React from 'react'
 import logoCover from '../../../../public/logoCover.png';
 import styles from './PortfolioCard.module.css';
@@ -24,8 +24,13 @@ function PortfolioCard(props: PortfolioCardProps) {
 
     const { customers } = useAppSelector((state) => state.customers);
 
-    const removeItem = (removeKey: React.Key) => {
-        dispatch(deletePortfolio(removeKey as number));
+    const removeItem = async (removeKey: React.Key) => {
+        try {
+            await dispatch(deletePortfolio(removeKey as number)).unwrap();
+            message.success('Portföy başarıyla silindi.');
+        } catch (error) {
+            message.error('Portföy silinirken bir hata oluştu.');
+        }
     };
 
     return (
