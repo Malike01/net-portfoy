@@ -65,3 +65,32 @@ exports.resendCode = async (req, res) => {
 
   res.json({ message: 'Kod gönderildi' });
 };
+
+exports.updateProfile = async (req, res) => {
+  const user = await User.findById(req.user.id);
+
+  if (user) {
+    // Sadece telefon değişiyorsa işlem yap
+    if (req.body.phone && req.body.phone !== user.phone) {
+      user.phone = req.body.phone;
+      
+      // Telefon değiştiği için doğrulamayı sıfırla!
+      user.isPhoneVerified = false; 
+      user.otpCode = undefined;
+      user.otpExpires = undefined;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      phone: updatedUser.phone,
+      isPhoneVerified: updatedUser.isPhoneVerified, 
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404).json({ message: 'Kullanıcı bulunamadı' });
+  }
+};

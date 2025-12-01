@@ -57,6 +57,21 @@ export const verifyPhoneAction = createAsyncThunk(
   }
 );
 
+export const updateProfile = createAsyncThunk(
+  'auth/updateProfile',
+  async (userData: { phone: string }, { dispatch, rejectWithValue }) => {
+    try {
+      const response = await api.put('/auth/profile', userData);
+      
+      localStorage.setItem('user', JSON.stringify(response.data));
+      
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,

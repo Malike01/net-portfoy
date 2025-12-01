@@ -19,6 +19,7 @@ import logo from '../../public/logo.png';
 import { MENU_KEYS, RECENT_NOTIFICATIONS, USER_MENU_KEYS } from '@/constant/Layout';
 import { markNotificationRead } from '@/services/notificationService';
 import PhoneVerificationModal from '@/components/PhoneVerificationModal';
+import SettingsModal from '@/pages/Settings';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -33,6 +34,7 @@ const MainLayout: React.FC = () => {
   const location = useLocation();
 
   const [isVerificationModalOpen, setVerificationModalOpen] = useState(false);
+  const [isSettingsModalOpen, setSettingsModalOpen] = useState(false); 
 
   const {
     token: { colorBgContainer },
@@ -114,6 +116,10 @@ const MainLayout: React.FC = () => {
       <PhoneVerificationModal 
         open={isVerificationModalOpen} 
         onClose={() => setVerificationModalOpen(false)} 
+      />
+      <SettingsModal 
+        open={isSettingsModalOpen} 
+        onCancel={() => setSettingsModalOpen(false)} 
       />
       <Sider
         trigger={null}
