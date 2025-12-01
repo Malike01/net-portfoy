@@ -11,7 +11,10 @@ if (process.env.NODE_ENV !== 'test') {
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "*", 
+  credentials: true
+}));
 app.use(express.json());
 
 // Routes
