@@ -59,3 +59,9 @@ export interface DbNotification {
   createdAt: string;
   relatedId?: string;
 }
+
+export interface Feature {
+  featureKey: string;
+  status: 'trial' | 'active' | 'expired';
+  trialStartDate?: string;
+}

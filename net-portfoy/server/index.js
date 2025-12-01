@@ -18,6 +18,7 @@ app.use('/api/customers', require('./routes/customerRoutes'));
 app.use('/api/portfolios', require('./routes/portfolioRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/features', require('./routes/featureRoutes'));
 
 app.get('/', (req, res) => {
   res.send('API sunucusu başarıyla çalışıyor...');

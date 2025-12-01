@@ -15,12 +15,28 @@ const getNotifications = async (req, res) => {
   if (!existingWelcome) {
     await Notification.create({
       user: userId,
-      title: `Aramıza Hoş Geldin, ${req.user.name.split(' ')[0]}! 👋`, // Sadece ilk ismini alalım
+      title: `Aramıza Hoş Geldin, ${req.user.name.split(' ')[0]}! 👋`,
       message: 'CRM sistemine başarıyla giriş yaptın. İlk müşterini veya portföyünü ekleyerek işe başlayabilirsin.',
       type: 'success',
       category: 'welcome',
       relatedId: '/dashboard'
     });
+  }
+
+  //----Feature Launch Notification----
+    const existingFeature = await Notification.findOne({
+    user: userId,
+    category: 'feature_launch'
+  });
+
+    if (!existingFeature) {
+      await Notification.create({
+        "title": "Yeni Özellik: Yapay Zeka Değerleme! 🤖",
+        "message": "Artık portföylerinizin fiyatını yapay zeka ile tahmin edebilirsiniz. 3 gün ücretsiz denemek için tıklayın.",
+        "type": "info",
+        "category": "feature_launch",
+        "relatedId": "/ai-valuation" 
+      });
   }
 
    //----Call Reminder Notification----

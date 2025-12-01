@@ -1,4 +1,5 @@
 import api from '@/services/api';
+import { Feature } from '@/types/type';
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface User {
@@ -8,6 +9,7 @@ interface User {
   token: string;
   phone?: string;
   isPhoneVerified: boolean;
+  features: Feature[];
 }
 
 interface AuthState {
@@ -67,6 +69,12 @@ const authSlice = createSlice({
       state.user = null;
       localStorage.removeItem('user');
     },
+    updateUserFeatures: (state, action: PayloadAction<Feature[]>) => {
+      if (state.user) {
+        state.user.features = action.payload;
+        localStorage.setItem('user', JSON.stringify(state.user));
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -93,5 +101,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, logout, updateUserFeatures } = authSlice.actions;
 export default authSlice.reducer;
