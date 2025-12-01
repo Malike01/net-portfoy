@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=10000"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +20,8 @@
     "mongoose": "^9.0.0",
     "nodemon": "^3.1.11",
     "twilio": "^5.10.6"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
