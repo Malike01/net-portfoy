@@ -16,4 +16,12 @@ export default defineConfig({
     setupFiles: './vitest.setup.ts',
     css: true, 
   },
+  server: {
+    watch: {
+      usePolling: true, 
+    },
+    host: true, 
+    strictPort: true,
+    port: 5173, 
+  }
 })
