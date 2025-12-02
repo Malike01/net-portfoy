@@ -1,7 +1,7 @@
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from '@/utils/test-utils';
 import Login from '../Login';
-import { vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/services/api', () => ({
   default: {

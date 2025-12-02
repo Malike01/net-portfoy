@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import authReducer, { logout, setCredentials } from '../authSlice';
 
 describe('Auth Reducer Testleri', () => {
