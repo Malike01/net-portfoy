@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   phone: { type: String, default: '' },
   isPhoneVerified: { type: Boolean, default: false },
-  role: { type: String, default: 'admin' }, 
+  role: { type: String, default: 'user' }, 
   otpCode: { type: String }, 
   otpExpires: { type: Date },
   features: [featureSchema],

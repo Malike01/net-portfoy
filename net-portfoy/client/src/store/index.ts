@@ -4,6 +4,7 @@ import portfoliosSlice from './portfoliosSlice';
 import customersSlice from './customersSlice';
 import notificationSlice from './notificationSlice';
 import dashboardSlice from './dashboardSlice';
+import usersSlice from './usersSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     customers: customersSlice,
     notification: notificationSlice,
     dashboard: dashboardSlice,
+    users: usersSlice
   },
   devTools: process.env.NODE_ENV !== 'production',
   // middleware: (getDefaultMiddleware) =>

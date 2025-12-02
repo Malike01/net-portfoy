@@ -11,14 +11,14 @@ const importData = async () => {
   try {
     await User.deleteMany();
 
-    const passwordToHash = process.env.TEST_USER_PASSWORD || '123456'; 
+    const passwordToHash = process.env.ADMIN_USER_PASSWORD || ''; 
     
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(passwordToHash, salt);
 
     await User.create({
       name: 'Admin User',
-      email: process.env.TEST_USER_EMAIL || 'admin@emlak.com', 
+      email: process.env.ADMIN_USER_EMAIL || '', 
       password: hashedPassword,
       role: 'admin',
       isPhoneVerified: true

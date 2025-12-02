@@ -10,16 +10,18 @@ import {
   SettingOutlined,
   CheckCircleTwoTone,
   BellOutlined,
-  ProductOutlined
+  ProductOutlined,
+  TeamOutlined
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import { PortfolioForm } from '../pages/Portfolios/components/PortfolioForm';
 import logo from '../../public/logo.png';
-import { MENU_KEYS, RECENT_NOTIFICATIONS, USER_MENU_KEYS } from '@/constant/Layout';
+import { MENU_KEYS, USER_MENU_KEYS } from '@/constant/Layout';
 import { markNotificationRead } from '@/services/notificationService';
 import PhoneVerificationModal from '@/components/PhoneVerificationModal';
 import SettingsModal from '@/pages/Settings';
+import AppTour from '@/components/AppTour';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -62,14 +64,22 @@ const MainLayout: React.FC = () => {
       key: MENU_KEYS.PORTFOLIOS.path,
       icon: <HomeOutlined />,
       label: MENU_KEYS.PORTFOLIOS.title,
+      className: 'tour-menu-portfolios',
       onClick: () => navigate(MENU_KEYS.PORTFOLIOS.path),
     },
     {
       key: MENU_KEYS.CUSTOMERS.path,
       icon: <UserOutlined />,
       label: MENU_KEYS.CUSTOMERS.title,
+      className: 'tour-menu-customers',
       onClick: () => navigate(MENU_KEYS.CUSTOMERS.path),
     },
+    (user?.role === 'admin' ? {
+      key: '/users',
+      icon: <TeamOutlined />, 
+      label: 'Personel',
+      onClick: () => navigate('/users')
+    } : null)
   ];
 
   const userMenuPoints = [
@@ -113,10 +123,11 @@ const MainLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <PhoneVerificationModal 
+      {/* <PhoneVerificationModal 
         open={isVerificationModalOpen} 
         onClose={() => setVerificationModalOpen(false)} 
-      />
+      /> */}
+      <AppTour />
       <SettingsModal 
         open={isSettingsModalOpen} 
         onCancel={() => setSettingsModalOpen(false)} 
@@ -164,7 +175,7 @@ const MainLayout: React.FC = () => {
             }}
           />
 
-          <div className="mr-6 flex items-center gap-3" style={{ display: 'flex', alignItems: 'center' }}>
+          <div className="mr-6 flex items-center gap-3 tour-notification-bell" style={{ display: 'flex', alignItems: 'center' }}>
             <Popover
               content={notificationContent}
               title="Bildirimler"
