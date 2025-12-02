@@ -34,7 +34,9 @@ const Dashboard: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={`${styles.header} tour-dashboard-kpi`}>
-        <Title level={2} className={styles.title}>Genel Durum</Title>
+        <Title level={2} className={styles.title}>Genel Bakış
+          
+        </Title>
 
         <div className={styles.widgetsContainer}>
           <div className={styles.widgetCard}>
