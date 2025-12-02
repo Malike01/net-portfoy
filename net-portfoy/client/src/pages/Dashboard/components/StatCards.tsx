@@ -74,7 +74,7 @@ export const StatCards: React.FC = () => {
   };
 
   return (
-    <Row gutter={[24, 24]} className={styles.row}>
+    <Row gutter={[24, 24]} className={`${styles.row} tour-dashboard-kpi`}>
       <Col xs={24} sm={12} lg={6}>
         <StatCard
           title={STAT_CARD_CONFIG.TOTAL_VALUE.title}

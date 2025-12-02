@@ -40,7 +40,7 @@ export const AgendaList: React.FC = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} tour-agenda`}>
       <Title level={4} className={styles.title}>Bugünün Ajandası</Title>
 
       <div className={styles.list}>
