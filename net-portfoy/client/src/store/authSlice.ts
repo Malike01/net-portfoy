@@ -10,6 +10,7 @@ interface User {
   phone?: string;
   isPhoneVerified: boolean;
   features: Feature[];
+  role: 'admin' | 'user';
 }
 
 interface AuthState {

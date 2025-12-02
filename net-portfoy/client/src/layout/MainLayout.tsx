@@ -10,13 +10,14 @@ import {
   SettingOutlined,
   CheckCircleTwoTone,
   BellOutlined,
-  ProductOutlined
+  ProductOutlined,
+  TeamOutlined
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { logout } from '../store/authSlice';
 import { PortfolioForm } from '../pages/Portfolios/components/PortfolioForm';
 import logo from '../../public/logo.png';
-import { MENU_KEYS, RECENT_NOTIFICATIONS, USER_MENU_KEYS } from '@/constant/Layout';
+import { MENU_KEYS, USER_MENU_KEYS } from '@/constant/Layout';
 import { markNotificationRead } from '@/services/notificationService';
 import PhoneVerificationModal from '@/components/PhoneVerificationModal';
 import SettingsModal from '@/pages/Settings';
@@ -70,6 +71,12 @@ const MainLayout: React.FC = () => {
       label: MENU_KEYS.CUSTOMERS.title,
       onClick: () => navigate(MENU_KEYS.CUSTOMERS.path),
     },
+    (user?.role === 'admin' ? {
+      key: '/users',
+      icon: <TeamOutlined />, 
+      label: 'Personel',
+      onClick: () => navigate('/users')
+    } : null)
   ];
 
   const userMenuPoints = [
