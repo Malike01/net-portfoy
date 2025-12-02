@@ -113,10 +113,10 @@ const MainLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <PhoneVerificationModal 
+      {/* <PhoneVerificationModal 
         open={isVerificationModalOpen} 
         onClose={() => setVerificationModalOpen(false)} 
-      />
+      /> */}
       <SettingsModal 
         open={isSettingsModalOpen} 
         onCancel={() => setSettingsModalOpen(false)} 
