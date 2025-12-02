@@ -71,7 +71,15 @@ const Users: React.FC = () => {
 
   return (
     <div style={{ paddingBottom: 40 }}>
-      <div className="flex justify-between items-center mb-6">
+      <div 
+        className="user-header" 
+        style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            marginBottom: 24 
+            }}
+        >
         <Title level={2} style={{ margin: 0 }}>Personel Yönetimi</Title>
         <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalOpen(true)}>
           Yeni Personel Ekle
