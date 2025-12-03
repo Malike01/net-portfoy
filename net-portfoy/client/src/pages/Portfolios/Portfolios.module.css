@@ -55,3 +55,8 @@
     gap: 8px;
     margin-top: 16px;
 }
+
+.statusWrap{
+  display: flex;
+  gap: 16px;
+}

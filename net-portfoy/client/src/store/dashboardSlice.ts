@@ -38,7 +38,7 @@ const dashboardSlice = createSlice({
       // Complete Task
       .addCase(completeAgendaTask.fulfilled, (state, action) => {
        if (state.stats) {
-          state.stats.agenda = state.stats.agenda.filter(item => item.id !== action.payload);
+          state.stats.agenda = state.stats.agenda.filter(item => item.id === action.payload);
         }
       });
   },

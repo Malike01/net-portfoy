@@ -24,7 +24,7 @@ export interface CustomerItem {
   portfolioId?: number;
   portfolioTitle?: string;
   customerType?: 'buyer' | 'seller';
-  date: Date;
+  nextActionDate: Date;
 }
 
 export interface DashboardData {
@@ -64,4 +64,10 @@ export interface Feature {
   featureKey: string;
   status: 'trial' | 'active' | 'expired';
   trialStartDate?: string;
+}
+
+export interface CompleteTaskPayload {
+  id: string;
+  model: 'customer' | 'portfolio';
+  type: string;
 }

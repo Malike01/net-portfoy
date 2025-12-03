@@ -21,8 +21,6 @@ export const CustomerForm: React.FC = () => {
 
   const status = Form.useWatch('status', form);
 
-  console.log('status', filteredOptions);
-
   const dispatch = useAppDispatch();
 
   const { id } = useParams();
@@ -32,7 +30,11 @@ export const CustomerForm: React.FC = () => {
     if (isCustomerModalOpen) {
       if (isEditMode) {
         const formValues = customers.find(c => c._id === id);
-        form.setFieldsValue({ ...formValues, portfolioId: formValues?.portfolioTitle });
+        form.setFieldsValue({ 
+          ...formValues, 
+          portfolioId: formValues?.portfolioTitle, 
+          nextActionDate: dayjs(formValues?.nextActionDate).format(DATE_FORMAT) 
+        });
       } else {
         form.resetFields();
       }
@@ -101,8 +103,8 @@ export const CustomerForm: React.FC = () => {
           </Form.Item>
         </div>
         {
-          status?.includes('to_call') && (
-            <Form.Item name="callDate" label="Arama Tarihi" initialValue={dayjs().format(DATE_FORMAT)}>
+         ['to_call', 'appointment'].includes(status) && (
+            <Form.Item name="nextActionDate" label="İşlem Tarihi" initialValue={dayjs().format(DATE_FORMAT)}>
               <Input type="date" />
             </Form.Item>
           )
