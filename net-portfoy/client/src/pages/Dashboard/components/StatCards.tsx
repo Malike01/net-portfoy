@@ -68,7 +68,7 @@ export const StatCards: React.FC = () => {
     const icon = isPositive ? <ArrowUpOutlined /> : <ArrowDownOutlined />;
     return (
       <Tag color={color} icon={icon}>
-        {isPercent ? '%' : ''}
+        {isPercent ? '%' : '' + value}
       </Tag>
     );
   };
@@ -81,8 +81,8 @@ export const StatCards: React.FC = () => {
           value={formatCurrency(kpi?.totalValue || 0)}
           icon={<DollarCircleOutlined />}
           color={STAT_CARD_CONFIG.TOTAL_VALUE.color}
-          trend={renderTrendTag(trends?.value || 0, true) as unknown as string}
-          trendUp={true}
+          trend={`${trends?.value || 0}%`} 
+          trendUp={(trends?.value || 0) > 0}
         />
       </Col>
       <Col xs={24} sm={12} lg={6}>
@@ -91,8 +91,8 @@ export const StatCards: React.FC = () => {
           value={kpi?.activePortfolios.toString() || "0"}
           icon={<HomeOutlined />}
           color={STAT_CARD_CONFIG.ACTIVE_PORTFOLIO.color}
-          trend={renderTrendTag(trends?.portfolio || 0) as unknown as string}
-          trendUp={true}
+          trend={`${trends?.portfolio || 0}`} 
+          trendUp={(trends?.portfolio || 0) > 0}
         />
       </Col>
       <Col xs={24} sm={12} lg={6}>
@@ -101,8 +101,8 @@ export const StatCards: React.FC = () => {
           value={kpi?.totalCustomers.toString() || "0"}
           icon={<TeamOutlined />}
           color={STAT_CARD_CONFIG.TOTAL_CUSTOMERS.color}
-          trend={renderTrendTag(trends?.customer || 0) as unknown as string}
-          trendUp={false}
+          trend={`${trends?.customer || 0}`} 
+          trendUp={(trends?.customer || 0) > 0}
         />
       </Col>
       <Col xs={24} sm={12} lg={6}>
@@ -111,8 +111,8 @@ export const StatCards: React.FC = () => {
           value={kpi?.soldThisMonth.toString() || "0"}
           icon={<CheckCircleOutlined />}
           color={STAT_CARD_CONFIG.SOLD_THIS_MONTH.color}
-          trend={renderTrendTag(trends?.sales || 0) as unknown as string}
-          trendUp={true}
+          trend={`${trends?.sales || 0}`} 
+          trendUp={(trends?.sales || 0) > 0}
         />
       </Col>
     </Row>

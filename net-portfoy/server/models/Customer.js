@@ -47,6 +47,10 @@ const customerSchema = mongoose.Schema(
     portfolioTitle: {
       type: String,
       default: ''
+    },
+    nextActionDate: {
+      type: Date,
+      default: Date.now 
     }
   },
   {

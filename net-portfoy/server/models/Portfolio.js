@@ -24,10 +24,10 @@ const portfolioSchema = mongoose.Schema(
       enum: ['TL', 'USD', 'EUR', 'GBP'],
       default: 'TL',
     },
-    
+
     portfolioType: {
       type: String,
-      enum: ['for_sale', 'for_rent', 'daily_rent', 'transfer'], 
+      enum: ['for_sale', 'for_rent', 'daily_rent', 'transfer'],
       default: 'for_sale',
       required: true
     },
@@ -35,12 +35,13 @@ const portfolioSchema = mongoose.Schema(
     status: {
       type: String,
       enum: [
-        'active',   
-        'offer',   
-        'deposit',  
-        'sold',     
-        'rented',   
-        'passive'   
+        'active',
+        'offer',
+        'deposit',
+        'sold',
+        'rented',
+        'passive',
+        'deed_sale'
       ],
       default: 'active',
     },
@@ -49,17 +50,22 @@ const portfolioSchema = mongoose.Schema(
       sahibinden: { type: String, default: '' },
       hepsiemlak: { type: String, default: '' },
       emlakjet: { type: String, default: '' },
-      website: { type: String, default: '' } 
+      website: { type: String, default: '' }
     },
 
     imageUrl: {
-      type: String, 
+      type: String,
     },
 
     matchedCustomers: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Customer'
-    }]
+    }],
+    
+    nextActionDate: {
+      type: Date,
+      default: Date.now 
+    }
   },
   {
     timestamps: true,

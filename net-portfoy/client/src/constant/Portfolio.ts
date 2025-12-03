@@ -13,7 +13,7 @@ export const PORTFOLIO_TYPES = {
   FOR_SALE: 'for_sale',
   FOR_RENT: 'for_rent',
   DAILY: 'daily_rent',
-  TRANSFER: 'transfer', 
+  TRANSFER: 'transfer',
 } as const;
 
 export const PORTFOLIO_TYPE_OPTIONS = [
@@ -35,6 +35,7 @@ export const PORTFOLIO_STATUSES = {
   SOLD: 'sold',               // Deal closed (Sale)
   RENTED: 'rented',           // Deal closed (Rent)
   PASSIVE: 'passive',         // Removed from listing / Inactive
+  DEED_SALE: 'deed_sale',     // Deed transfer / Sale process
 } as const;
 
 export const PORTFOLIO_STATUS_OPTIONS = [
@@ -42,6 +43,7 @@ export const PORTFOLIO_STATUS_OPTIONS = [
   { label: 'Yayında / Aktif', value: PORTFOLIO_STATUSES.ACTIVE, color: 'success' }, // Green: Available
   { label: 'Teklif Aşamasında', value: PORTFOLIO_STATUSES.OFFER_PROCESS, color: 'processing' }, // Blue: Active negotiation
   { label: 'Kapora / Opsiyonlu', value: PORTFOLIO_STATUSES.DEPOSIT_TAKEN, color: 'warning' }, // Orange: Reserved
+  { label: 'Tapu/Satış', value: PORTFOLIO_STATUSES.DEED_SALE, color: 'purple' }, // Purple: Deed/Sale
 
   // -- Completed Stages --
   { label: 'Satıldı', value: PORTFOLIO_STATUSES.SOLD, color: 'red' }, // Red: No longer available

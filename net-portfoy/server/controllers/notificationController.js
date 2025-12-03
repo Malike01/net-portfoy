@@ -1,12 +1,12 @@
 const Notification = require('../models/Notification');
 const Customer = require('../models/Customer');
+const Portfolio = require('../models/Portfolio'); 
 
-// @desc    
+// @desc  
 // @route   GET /api/notifications
 const getNotifications = async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user._id; 
 
-  //----Welcome Notification----
   const existingWelcome = await Notification.findOne({
     user: userId,
     category: 'welcome'
@@ -23,62 +23,80 @@ const getNotifications = async (req, res) => {
     });
   }
 
-  //----Feature Launch Notification----
-    const existingFeature = await Notification.findOne({
-    user: userId,
-    category: 'feature_launch'
-  });
-
-    if (!existingFeature) {
-      await Notification.create({
-        "title": "Yeni Özellik: Yapay Zeka Değerleme! 🤖",
-        "message": "Artık portföylerinizin fiyatını yapay zeka ile tahmin edebilirsiniz. 3 gün ücretsiz denemek için tıklayın.",
-        "type": "info",
-        "category": "feature_launch",
-        "relatedId": "/ai-valuation" 
-      });
-  }
-
-   //----Call Reminder Notification----
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
-  const existingReminder = await Notification.findOne({
-    user: userId,
-    category: 'call_reminder',
-    createdAt: { $gte: startOfDay }
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const callCount = await Customer.countDocuments({ 
+    user: userId, 
+    status: 'to_call',
+    nextActionDate: { $lte: endOfDay }
   });
 
-  if (!existingReminder) {
-    const callCount = await Customer.countDocuments({ 
-      user: userId, 
-      status: 'to_call' 
+  const appointmentCount = await Customer.countDocuments({ 
+    user: userId, 
+    status: 'appointment',
+    nextActionDate: { $lte: endOfDay }
+  });
+
+  const deedCount = await Portfolio.countDocuments({ 
+    user: userId, 
+    status: 'deed_sale',
+    nextActionDate: { $lte: endOfDay }
+  });
+
+  const totalTasks = callCount + appointmentCount + deedCount;
+
+  let detailString = '';
+  let details = [];
+  if (callCount > 0) details.push(`${callCount} arama`);
+  if (appointmentCount > 0) details.push(`${appointmentCount} randevu`);
+  if (deedCount > 0) details.push(`${deedCount} tapu işlemi`);
+  detailString = details.join(', ');
+
+  const notificationMessage = `Bugün ilgilenmeniz gereken ${detailString} sistemde sizi bekliyor.`;
+
+  if (totalTasks > 0) {
+    const existingReminder = await Notification.findOne({
+      user: userId,
+      category: 'daily_summary', 
+      createdAt: { $gte: startOfDay }
     });
 
-    if (callCount > 0) {
+    if (existingReminder) {
+      if (existingReminder.message !== notificationMessage) {
+        existingReminder.message = notificationMessage;
+        existingReminder.title = `Güncel İş Planı (${totalTasks} Görev) 📅`; // Başlığı da güncelleyelim
+        existingReminder.isRead = false; // <--- TEKRAR OKUNMADI YAP (Bildirim ışığı yansın)
+        existingReminder.updatedAt = new Date(); // Sıralamada yukarı çıksın
+        await existingReminder.save();
+      }
+    } else {
       await Notification.create({
         user: userId,
-        title: 'Hatırlatma: Aramalarınız Var',
-        message: `Bugün aramanız gereken ${callCount} adet müşteri listenizde bekliyor.`,
+        title: 'Günlük İş Planınız Hazır 📅',
+        message: notificationMessage,
         type: 'warning',
-        category: 'call_reminder',
-        relatedId: '/customers' 
+        category: 'daily_summary',
+        relatedId: '/dashboard' 
       });
     }
   }
 
   const notifications = await Notification.find({ user: userId })
-    .sort({ isRead: 1, createdAt: -1 });
+    .sort({ isRead: 1, createdAt: -1 }); 
 
   res.status(200).json(notifications);
 };
 
-// @desc    
+// @desc  
 // @route   PUT /api/notifications/:id/read
 const markAsRead = async (req, res) => {
   const notification = await Notification.findById(req.params.id);
 
-  if (notification && notification.user.toString() === req.user.id) {
+  if (notification && notification.user.toString() === req.user._id.toString()) {
     notification.isRead = true;
     await notification.save();
     res.status(200).json(notification);
@@ -88,7 +106,7 @@ const markAsRead = async (req, res) => {
   }
 };
 
-// @desc  
+// @desc   
 // @route   POST /api/notifications/system
 const createSystemNotification = async (req, res) => {
     const { title, message, userId } = req.body;

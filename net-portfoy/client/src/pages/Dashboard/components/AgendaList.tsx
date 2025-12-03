@@ -9,9 +9,10 @@ import {
   UserOutlined
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { completeAgendaTask } from '@/services/dashboardService';
+import { completeAgendaTask, fetchDashboardStats } from '@/services/dashboardService';
 import { AGENDA_CONFIG, AGENDA_STATUSES } from '@/constant/Dashboard';
 import styles from './styles/AgendaList.module.css';
+import { CompleteTaskPayload } from '@/types/type';
 
 const { Title, Text } = Typography;
 
@@ -35,8 +36,13 @@ export const AgendaList: React.FC = () => {
     return { ...config, icon };
   };
 
-  const handleCompleteTask = (id: string) => {
-    dispatch(completeAgendaTask(id));
+  const handleCompleteTask = (item:CompleteTaskPayload) => {
+    dispatch(completeAgendaTask({ 
+      id: item.id, 
+      model: item.model,
+      type: item.type    
+    }));
+    dispatch(fetchDashboardStats());
   };
 
   return (
@@ -44,7 +50,7 @@ export const AgendaList: React.FC = () => {
       <Title level={4} className={styles.title}>Bugünün Ajandası</Title>
 
       <div className={styles.list}>
-        {agenda.length > 0 ? agenda.map((item) => {
+        {agenda.length > 0 ? agenda.map((item:any) => {
           const config = getStatusConfig(item.type);
           return (
             <div
@@ -82,7 +88,7 @@ export const AgendaList: React.FC = () => {
                   shape="circle"
                   type="text"
                   icon={<CheckCircleOutlined />}
-                  onClick={() => handleCompleteTask(item.id)}
+                  onClick={() => handleCompleteTask(item)}
                   className={`${styles.actionButton} ${item.isCompleted ? styles.actionButtonCompleted : styles.actionButtonDefault}`}
                 />
               </Tooltip>

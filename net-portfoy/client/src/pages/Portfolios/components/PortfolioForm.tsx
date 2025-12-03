@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { clearCurrentItem, setIsPortfolioModalOpen } from '@/store/portfoliosSlice';
 import { CURRENCY_OPTIONS, PORTFOLIO_STATUS_OPTIONS, PORTFOLIO_TYPE_OPTIONS, PORTFOLIO_TYPES } from '@/constant/Portfolio';
 import { GlobalOutlined, HomeOutlined, LinkOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { IMAGE_UPLOAD_FILE_TYPES, REGEX } from '@/constant/General';
+import { DATE_FORMAT, IMAGE_UPLOAD_FILE_TYPES, REGEX } from '@/constant/General';
 import { truncateText } from '@/utils';
 import { setIsCustomerModalOpen } from '@/store/customersSlice';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -24,6 +24,10 @@ export const PortfolioForm: React.FC = () => {
   const { customers } = useAppSelector((state) => state.customers);
 
   const dispatch = useAppDispatch();
+
+  const status = Form.useWatch('status', form);
+
+  const isDeedSale = status === 'deed_sale';
 
   useEffect(() => {
     if (isEditMode) {
@@ -125,7 +129,6 @@ export const PortfolioForm: React.FC = () => {
     form.resetFields();
   };
 
-
   return (
     <Modal
       title={isEditMode ? "Portföyü Düzenle" : "Yeni Portföy Ekle"}
@@ -148,9 +151,18 @@ export const PortfolioForm: React.FC = () => {
             <Select options={CURRENCY_OPTIONS} />
           </Form.Item>
         </div>
-        <Form.Item name="status" label="Durum" className={styles.flexItem} initialValue="Satılık">
-          <Select options={PORTFOLIO_STATUS_OPTIONS} />
-        </Form.Item>
+        <div className={styles.statusWrap}>
+          <Form.Item name="status" label="Durum" className={styles.flexItem} initialValue="Satılık">
+            <Select options={PORTFOLIO_STATUS_OPTIONS} />
+          </Form.Item>
+          {
+            (isDeedSale) && (
+              <Form.Item name="callDate" className={styles.flexItem} label="İşlem Tarihi" initialValue={dayjs().format(DATE_FORMAT)}>
+                <Input type="date" />
+              </Form.Item>
+            )
+          }
+        </div>
         <Form.Item name="description" label="Açıklama">
           <Input.TextArea rows={3} maxLength={50} placeholder='İlan hakkında kısa bir açıklama...' />
         </Form.Item>

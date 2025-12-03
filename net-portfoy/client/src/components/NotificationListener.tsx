@@ -8,12 +8,13 @@ const NotificationListener: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { items } = useAppSelector((state) => state.notification);
+  const { stats } = useAppSelector((state) => state.dashboard);
+  
   const displayedRefs = useRef<Set<string>>(new Set()); 
-
 
   useEffect(() => {
     dispatch(fetchDbNotifications());
-  }, []);
+  }, [stats]);
 
   useEffect(() => {
     items.forEach((item) => {

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from './api';
-import { DashboardData } from '@/types/type';
+import { CompleteTaskPayload, DashboardData } from '@/types/type';
 
 export const fetchDashboardStats = createAsyncThunk<DashboardData, void>(
   'dashboard/fetchStats',
@@ -15,13 +15,13 @@ export const fetchDashboardStats = createAsyncThunk<DashboardData, void>(
 
 export const completeAgendaTask = createAsyncThunk(
   'dashboard/completeTask',
-  async (customerId: string, {  rejectWithValue }) => {
+  async ({ id, model, type }: CompleteTaskPayload, { rejectWithValue }) => {
     try {
-      await api.put(`/customers/${customerId}`,{ id: customerId, data: { status: 'completed' } });
-      
-      return customerId; 
+
+      await api.put(`/dashboard/${id}/complete`, { model, type });
+            return id; 
     } catch (error: any) {
-      return rejectWithValue(error.response?.data);
+      return rejectWithValue(error.response?.data?.message || 'İşlem başarısız');
     }
   }
 );

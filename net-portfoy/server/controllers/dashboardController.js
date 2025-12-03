@@ -21,6 +21,12 @@ const getDashboardStats = async (req, res) => {
   const userId = req.user.id;
   const { startOfThisMonth, startOfLastMonth, endOfLastMonth } = getDateFilters();
 
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999); 
+
   try {
     const portfolios = await Portfolio.find({ user: userId });
     
@@ -58,17 +64,62 @@ const getDashboardStats = async (req, res) => {
     const customersLastMonth = customers.filter(c => c.createdAt >= startOfLastMonth && c.createdAt <= endOfLastMonth).length;
     const customerTrend = customersThisMonth - customersLastMonth; 
 
-    const agendaStatuses = ['to_call', 'offer_made', 'follow_up', 'appointment', 'new'];
-    const agendaItems = customers
-      .filter(c => agendaStatuses.includes(c.status))
-      .slice(0, 5)
-      .map(c => ({
+   const completedStatuses = ['follow_up', 'offer_made', 'processed', 'sold'];
+
+   const taskCustomers = await Customer.find({ 
+        user: userId, 
+        $or: [
+          { status: { $in: ['to_call', 'appointment'] },
+            nextActionDate: { $lte: endOfDay }
+          },
+          { 
+            status: { $in: completedStatuses },
+            updatedAt: { $gte: startOfDay, $lte: endOfDay }
+          }
+        ]
+    }).select('name status nextActionDate');
+
+    const taskPortfolios = await Portfolio.find({ 
+        user: userId, 
+        $or: [
+          { 
+            status: 'deed_sale',
+            nextActionDate: { $lte: endOfDay } 
+          },
+          { 
+            status: 'sold',
+            updatedAt: { $gte: startOfDay, $lte: endOfDay } 
+          }
+        ]
+    }).select('title status nextActionDate price');
+
+    const customerTasks = taskCustomers.map(c => ({
         id: c._id,
         title: c.name,
+        subtitle: c.status === 'to_call' ? 'Arama Yapılacak' : 'İşlem Geçmişi',
         type: c.status,
-        time: c.updatedAt,
-        isCompleted: false
-      }));
+        model: 'customer',
+        time: completedStatuses.includes(c.status) ? c.updatedAt : c.nextActionDate,
+        isCompleted: completedStatuses.includes(c.status) 
+    }));
+
+    const portfolioTasks = taskPortfolios.map(p => ({
+        id: p._id,
+        title: p.title,
+        subtitle: `Tapu Satış - ${p.price} TL`,
+        type: p.status,
+        model: 'portfolio',
+        time: completedStatuses.includes(p.status) ? p.updatedAt : p.nextActionDate,
+        isCompleted: completedStatuses.includes(p.status)
+    }));
+
+    const agendaItems = [...customerTasks, ...portfolioTasks]
+        .sort((a, b) => {
+            if (a.isCompleted !== b.isCompleted) {
+                return a.isCompleted ? 1 : -1;
+            }
+            return new Date(a.time) - new Date(b.time)
+        });
 
     res.status(200).json({
       kpi: {
@@ -93,4 +144,53 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
-module.exports = { getDashboardStats };
+const completeAgendaItem = async (req, res) => {
+  const { id } = req.params;
+  const { model, type } = req.body;
+
+  try {
+    let updatedItem;
+    if (model === 'customer') {
+      let newStatus = 'processed';
+
+      if (type === 'to_call') {
+        newStatus = 'follow_up'; 
+      } else if (type === 'appointment') {
+        newStatus = 'offer_made';
+      }
+
+      updatedItem = await Customer.findByIdAndUpdate(
+        id, 
+        { status: newStatus },
+        { new: true }
+      );
+    } 
+    else if (model === 'portfolio') {
+      if (type === 'deed_sale') {
+        updatedItem = await Portfolio.findByIdAndUpdate(
+          id,
+          { status: 'sold' }, 
+          { new: true }
+        );
+      }
+    } 
+    else {
+      return res.status(400).json({ message: 'Geçersiz veri kaynağı (model)' });
+    }
+
+    if (!updatedItem) {
+      return res.status(404).json({ message: 'Kayıt bulunamadı' });
+    }
+
+    res.status(200).json({ 
+      success: true, 
+      message: 'Görev tamamlandı, statü güncellendi.',
+      newStatus: updatedItem.status 
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Güncelleme yapılamadı', error: error.message });
+  }
+};
+
+module.exports = { getDashboardStats, completeAgendaItem };
